@@ -6,6 +6,6 @@ import com.google.gson.annotations.SerializedName;
 public class Search extends Response{
 
     @SerializedName("pagination")
-    Pagination pagination;
+    public Pagination pagination;
 
 }

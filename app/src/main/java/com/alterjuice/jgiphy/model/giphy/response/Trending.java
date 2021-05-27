@@ -6,6 +6,6 @@ import com.google.gson.annotations.SerializedName;
 public class Trending extends Response{
 
     @SerializedName("pagination")
-    Pagination pagination;
+    public Pagination pagination;
 
 }
