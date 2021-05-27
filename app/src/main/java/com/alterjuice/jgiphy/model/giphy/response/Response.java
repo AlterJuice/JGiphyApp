@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class Response {
+
     @SerializedName("data")
     public ArrayList<Gif> data;
 
