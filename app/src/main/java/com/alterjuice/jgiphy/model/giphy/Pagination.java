@@ -13,13 +13,16 @@ import com.google.gson.annotations.SerializedName;
  *
  */
 public class Pagination {
-    @SerializedName("offset") // Position in pagination. 2591
+    @SerializedName("offset")
+    /* Position in pagination. 2591 */
     public Integer offset;
 
-    @SerializedName("total_count") // Total number of items available (not returned on every endpoint). 250
+    @SerializedName("total_count")
+    /* Total number of items available (not returned on every endpoint). 250 */
     public Integer countTotal;
 
-    @SerializedName("count") // Total number of items returned. 25
+    @SerializedName("count")
+    /* Total number of items returned. 25 */
     public Integer count;
 
 }

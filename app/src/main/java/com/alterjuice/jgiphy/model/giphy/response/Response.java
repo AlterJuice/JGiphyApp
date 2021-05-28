@@ -14,8 +14,6 @@ public class Response {
     @SerializedName("meta")
     public Meta meta;
 
-    public Response(){
-
-    }
+    public Response(){ }
 
 }

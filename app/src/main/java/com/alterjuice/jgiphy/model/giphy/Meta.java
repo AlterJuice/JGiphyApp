@@ -15,12 +15,15 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Meta {
 
-    @SerializedName("msg") // HTTP Response Message.(required) "OK"
+    @SerializedName("msg")
+    /* HTTP Response Message.(required) "OK" */
     public String msg;
 
-    @SerializedName("status") // HTTP Response Code. (required) 200
+    @SerializedName("status")
+    /* HTTP Response Code. (required) 200 */
     public Integer status;
 
-    @SerializedName("response_id") // A unique ID paired with this response from the API.	"57eea03c72381f86e05c35d2"
+    @SerializedName("response_id")
+    /* A unique ID paired with this response from the API. "57eea03c72381f86e05c35d2" */
     public String responseID;
 }
