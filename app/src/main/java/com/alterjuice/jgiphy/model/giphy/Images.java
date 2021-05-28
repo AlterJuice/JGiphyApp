@@ -4,28 +4,30 @@ import com.google.gson.annotations.SerializedName;
 
 public class Images {
 
-    // https://developers.giphy.com/docs/api/schema#image-object
-
-    // fixed_height: Data on versions of this GIF with a fixed height of 200 pixels. Good for mobile use.
-    // fixed_height_still: Data on a static image of this GIF with a fixed height of 200 pixels.
-    // fixed_height_downsampled: Data on versions of this GIF with a fixed height of 200 pixels and the number of frames reduced to 6.
-    // fixed_width: Data on versions of this GIF with a fixed width of 200 pixels. Good for mobile use.
-    // fixed_width_still: Data on a static image of this GIF with a fixed width of 200 pixels.
-    // fixed_width_downsampled: Data on versions of this GIF with a fixed width of 200 pixels and the number of frames reduced to 6.
-    // fixed_height_small: Data on versions of this GIF with a fixed height of 100 pixels. Good for mobile keyboards.
-    // fixed_height_small_still: Data on a static image of this GIF with a fixed height of 100 pixels.
-    // fixed_width_small: Data on versions of this GIF with a fixed width of 100 pixels. Good for mobile keyboards.
-    // fixed_width_small_still: Data on a static image of this GIF with a fixed width of 100 pixels.
-    // downsized: Data on a version of this GIF downsized to be under 2mb.
-    // downsized_still: Data on a static preview image of the downsized version of this GIF.
-    // downsized_large: Data on a version of this GIF downsized to be under 8mb.
-    // downsized_medium: Data on a version of this GIF downsized to be under 5mb.
-    // downsized_small: Data on a version of this GIF downsized to be under 200kb.
-    // original: Data on the original version of this GIF. Good for desktop use.
-    // original_still: Data on a static preview image of the original GIF.
-    // looping: Data on the 15 second version of the GIF looping.
-    // preview: Data on a version of this GIF in .MP4 format limited to 50kb that displays the first 1-2 seconds of the GIF.
-    // preview_gif: Data on a version of this GIF limited to 50kb that displays the first 1-2 seconds of the GIF.
+    /*
+     https://developers.giphy.com/docs/api/schema#image-object
+     
+     fixed_height:             Data on versions of this GIF with a fixed height of 200 pixels. Good for mobile use.
+     fixed_height_still:       Data on a static image of this GIF with a fixed height of 200 pixels.
+     fixed_height_downsampled: Data on versions of this GIF with a fixed height of 200 pixels and the number of frames reduced to 6.
+     fixed_width:              Data on versions of this GIF with a fixed width of 200 pixels. Good for mobile use.
+     fixed_width_still:        Data on a static image of this GIF with a fixed width of 200 pixels.
+     fixed_width_downsampled:  Data on versions of this GIF with a fixed width of 200 pixels and the number of frames reduced to 6.
+     fixed_height_small:       Data on versions of this GIF with a fixed height of 100 pixels. Good for mobile keyboards.
+     fixed_height_small_still: Data on a static image of this GIF with a fixed height of 100 pixels.
+     fixed_width_small:        Data on versions of this GIF with a fixed width of 100 pixels. Good for mobile keyboards.
+     fixed_width_small_still:  Data on a static image of this GIF with a fixed width of 100 pixels.
+     downsized:                Data on a version of this GIF downsized to be under 2mb.
+     downsized_still:          Data on a static preview image of the downsized version of this GIF.
+     downsized_large:          Data on a version of this GIF downsized to be under 8mb.
+     downsized_medium:         Data on a version of this GIF downsized to be under 5mb.
+     downsized_small:          Data on a version of this GIF downsized to be under 200kb.
+     original:                 Data on the original version of this GIF. Good for desktop use.
+     original_still:           Data on a static preview image of the original GIF.
+     looping:                  Data on the 15 second version of the GIF looping.
+     preview:                  Data on a version of this GIF in .MP4 format limited to 50kb that displays the first 1-2 seconds of the GIF.
+     preview_gif:              Data on a version of this GIF limited to 50kb that displays the first 1-2 seconds of the GIF.
+    */
 
     @SerializedName("fixed_height")
     /* Data on versions of this GIF with a fixed height of 200 pixels. Good for mobile use. */
