@@ -16,7 +16,7 @@ import com.google.gson.annotations.SerializedName;
  * https://developers.giphy.com/docs/api/schema/#image-object
  *
  */
-public class Image {
+public class Image implements ImageModel {
 
     @SerializedName("frames")
     /* The number of frames in this GIF. "15" */
@@ -55,4 +55,8 @@ public class Image {
     public String webpSize;
 
 
+    @Override
+    public String getImageRatio() {
+        return String.format("%s:%s", width, height);
+    }
 }

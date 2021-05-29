@@ -13,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * https://developers.giphy.com/docs/api/schema#gif-object
  */
-public class Gif {
+public class Gif implements GifModel{
     // GSON naming: https://github.com/google/gson/blob/master/UserGuide.md#json-field-naming-support
 
     @SerializedName("type")
@@ -92,4 +92,19 @@ public class Gif {
     @SerializedName("images")
     /* An object containing data for various available formats and sizes of this GIF. */
     public Images images;
+
+    @Override
+    public Image getPreviewImage() {
+        return images.fixedWidth;
+    }
+
+    @Override
+    public Image getFullImage() {
+        return images.original;
+    }
+
+    @Override
+    public boolean hasUser() {
+        return user != null;
+    }
 }
