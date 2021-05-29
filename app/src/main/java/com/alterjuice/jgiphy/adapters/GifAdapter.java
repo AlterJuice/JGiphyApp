@@ -50,9 +50,9 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
         Image bindImage = bindGif.getPreviewImage();
         holder.bind(bindGif);
         ImageUtils.loadGifIntoView(bindImage.url, holder.binding.gifImage);
-        // constraintSet.clone(holder.binding.gifConstraint);
-        // constraintSet.setDimensionRatio(holder.binding.gifImage.getId(), bindImage.getImageRatio());
-        // constraintSet.applyTo(holder.binding.gifConstraint);
+        constraintSet.clone(holder.binding.gifConstraint);
+        constraintSet.setDimensionRatio(holder.binding.gifImage.getId(), bindImage.getImageRatio());
+        constraintSet.applyTo(holder.binding.gifConstraint);
     }
 
 
