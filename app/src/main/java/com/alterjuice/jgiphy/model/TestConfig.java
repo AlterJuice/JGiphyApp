@@ -1,6 +1,6 @@
 package com.alterjuice.jgiphy.model;
 
 public class TestConfig {
-    String apiKey = "";
-    // TODO: Set ApiKey from
+    public static final String apiKey = "";
+    /* TODO: Set ApiKey from https://developers.giphy.com/dashboard/?create=true */
 }
