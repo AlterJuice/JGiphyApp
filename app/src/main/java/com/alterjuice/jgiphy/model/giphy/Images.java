@@ -2,11 +2,13 @@ package com.alterjuice.jgiphy.model.giphy;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Images {
+import java.io.Serializable;
+
+public class Images implements Serializable {
 
     /*
      https://developers.giphy.com/docs/api/schema#image-object
-     
+
      fixed_height:             Data on versions of this GIF with a fixed height of 200 pixels. Good for mobile use.
      fixed_height_still:       Data on a static image of this GIF with a fixed height of 200 pixels.
      fixed_height_downsampled: Data on versions of this GIF with a fixed height of 200 pixels and the number of frames reduced to 6.

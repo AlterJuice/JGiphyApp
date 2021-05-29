@@ -2,6 +2,8 @@ package com.alterjuice.jgiphy.model.giphy;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * The model of Gif object from Giphy Schema Definitions:
  *
@@ -13,7 +15,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * https://developers.giphy.com/docs/api/schema#gif-object
  */
-public class Gif implements GifModel{
+public class Gif implements GifModel, Serializable {
     // GSON naming: https://github.com/google/gson/blob/master/UserGuide.md#json-field-naming-support
 
     @SerializedName("type")

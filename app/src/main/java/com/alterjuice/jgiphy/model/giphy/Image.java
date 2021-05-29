@@ -2,6 +2,8 @@ package com.alterjuice.jgiphy.model.giphy;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  *
  * The Images Object
@@ -16,7 +18,7 @@ import com.google.gson.annotations.SerializedName;
  * https://developers.giphy.com/docs/api/schema/#image-object
  *
  */
-public class Image implements ImageModel {
+public class Image implements ImageModel, Serializable {
 
     @SerializedName("frames")
     /* The number of frames in this GIF. "15" */
