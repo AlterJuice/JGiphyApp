@@ -15,7 +15,7 @@ import java.io.Serializable;
  *
  * https://developers.giphy.com/docs/api/schema#gif-object
  */
-public class Gif implements GifModel, Serializable {
+public class Gif implements GifView, Serializable {
     // GSON naming: https://github.com/google/gson/blob/master/UserGuide.md#json-field-naming-support
 
     @SerializedName("type")

@@ -1,14 +1,17 @@
 package com.alterjuice.jgiphy.adapters;
 
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.alterjuice.jgiphy.R;
 import com.alterjuice.jgiphy.databinding.ListItemGifBinding;
 import com.alterjuice.jgiphy.model.giphy.Gif;
 import com.alterjuice.jgiphy.model.giphy.Image;
@@ -18,20 +21,27 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> implements BaseAdapter<Gif> {
+
+    private final OnBottomReachedListener onBottomReachedListener;
+    private final OnGifClickedListener onGifClickedListener;
+
+    private final ConstraintSet constraintSet = new ConstraintSet();
+    final boolean orientationIsPortrait;
+    private final RecyclerView.LayoutManager layoutManager;
+    private static final int layoutSpanCount = 2;
+
+    RecyclerView recyclerView;
     LinkedList<Gif> collection = new LinkedList<>();
 
-    public OnBottomReachedListener onBottomReachedListener;
-    public OnGifClickedListener onGifClickedListener;
-    private ConstraintSet constraintSet = new ConstraintSet();
-    RecyclerView recyclerView;
-    final boolean orientationIsPortrait;
-    RecyclerView.LayoutManager manager;
-    public Image getImageForPreview(Gif gif){ return gif.images.fixedWidth; }
-
-    public GifAdapter(boolean orientationIsPortrait){
+    public GifAdapter(boolean orientationIsPortrait, OnBottomReachedListener onBottomReachedListener,
+                      OnGifClickedListener onGifClickedListener){
+        this.onGifClickedListener = onGifClickedListener;
+        this.onBottomReachedListener = onBottomReachedListener;
         this.orientationIsPortrait = orientationIsPortrait;
-        int orientation = orientationIsPortrait ? StaggeredGridLayoutManager.VERTICAL : StaggeredGridLayoutManager.HORIZONTAL;
-        manager = new StaggeredGridLayoutManager(2, orientation);
+        int orientation = StaggeredGridLayoutManager.VERTICAL;
+        if (!this.orientationIsPortrait)
+            orientation = StaggeredGridLayoutManager.HORIZONTAL;
+        layoutManager = new StaggeredGridLayoutManager(layoutSpanCount, orientation);
     }
 
     Image getPreviewImage(Gif gif){
@@ -43,17 +53,15 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
-
-        this.recyclerView.setLayoutManager(manager);
+        this.recyclerView.setLayoutManager(layoutManager);
         super.onAttachedToRecyclerView(this.recyclerView);
     }
 
     @NonNull
     @Override
     public GifViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // View view = LayoutInflater.from(parent.getContext())
-        // .inflate(R.layout.list_item_gif, parent, false);
-        ListItemGifBinding binding = ListItemGifBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        ListItemGifBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item_gif, parent, false);
         return new GifViewHolder(binding.getRoot(), binding);
     }
 
@@ -76,18 +84,11 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
     @Override
     public int getItemCount() { return collection.size(); }
 
-    public void addItem(Gif gif) {
-        collection.add(gif);
-        notifyItemChanged(collection.size()-1);
-        // notifyDataSetChanged();
-    }
-
     @Override
     public void updateWithStartPosition(Collection<Gif> items, int position) {
         update(items);
         recyclerView.getLayoutManager().scrollToPosition(position);
     }
-
 
     @Override
     public void update(Collection<Gif> items) {

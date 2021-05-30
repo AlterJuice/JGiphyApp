@@ -18,7 +18,7 @@ import java.io.Serializable;
  * https://developers.giphy.com/docs/api/schema/#image-object
  *
  */
-public class Image implements ImageModel, Serializable {
+public class Image implements ImageView, Serializable {
 
     @SerializedName("frames")
     /* The number of frames in this GIF. "15" */
