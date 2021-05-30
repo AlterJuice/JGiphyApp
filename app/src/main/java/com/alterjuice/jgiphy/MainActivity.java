@@ -1,5 +1,6 @@
 package com.alterjuice.jgiphy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -46,13 +47,27 @@ public class MainActivity extends AppCompatActivity {
         adapter.onGifClickedListener = new OnGifClickedListener() {
             @Override
             public void onGifClicked(Gif gif, int position) {
-                getSupportFragmentManager().beginTransaction()
-                        .add(GifFragment.newInstance(gif), "Tag").commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(binding.gifFragment.getId(), GifFragment.newInstance(gif))
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .addToBackStack("Tag")
+                        .commit();
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
         };
         return adapter;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1){
+            getSupportFragmentManager().popBackStack();
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

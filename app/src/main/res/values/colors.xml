@@ -17,4 +17,8 @@
     <color name="black_transparent">#B3000000</color>
     <color name="grey_transparent_30">#4D4E4E4E</color>
     <color name="text_color_2">#89000000</color>
+
+    <color name="blue_grey_700">#455a64</color>
+    <color name="blue_grey_700_light">#718792</color>
+    <color name="blue_grey_700_dark">#1c313a</color>
 </resources>

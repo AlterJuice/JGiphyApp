@@ -12,5 +12,21 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="colorControlHighlight">@color/blue_grey_700_dark</item>
     </style>
+    <style name="GifFragmentButton">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <!--<item name="android:foreground">?attr/selectableItemBackground</item>-->
+
+        <item name="android:foreground">@drawable/pressed</item>
+        <item name="tint">@color/blue_grey_700_dark</item>
+        <item name="android:paddingVertical">7dp</item>
+
+    </style>
+
 </resources>

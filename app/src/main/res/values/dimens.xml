@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="cornerRadius">15dp</dimen>
-    <dimen name="cornerHalfRadius">12</dimen>
+    <dimen name="cornerHalfRadius">12dp</dimen>
 </resources>

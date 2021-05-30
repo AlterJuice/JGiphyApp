@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerGifs"
             android:layout_width="match_parent"
@@ -24,19 +23,21 @@
             app:layout_constraintTop_toTopOf="parent"
 
             />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{search}"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:visibility="gone"
             android:id="@+id/menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_alignParentBottom="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/bottom_menu" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/gifFragment"
+            />
 
     </RelativeLayout>
 </layout>

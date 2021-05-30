@@ -14,14 +14,17 @@
         android:layout_height="match_parent"
         android:background="@drawable/shape_empty"
         android:backgroundTint="@color/black_transparent"
+
         android:tooltipText="@{x}">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="50dp">
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="50dp"
+            android:elevation="5dp"
+            >
 
             <View
                 android:id="@+id/gifTopPanel"
@@ -29,62 +32,80 @@
                 android:layout_height="50dp"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/shape_rounded_half_top"
-                android:backgroundTint="@color/cardview_dark_background" />
+                android:backgroundTint="@color/blue_grey_700" />
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/gifBottomPanel"
                 android:layout_below="@id/gifTopPanel"
-                android:background="@drawable/shape_empty">
+                android:background="@drawable/shape_empty"
+                android:backgroundTint="@color/blue_grey_700_light">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/gifOriginalImage"
+                    android:id="@+id/gifCard"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="10dp" />
+                    android:layout_margin="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/gifImage"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_centerInParent="true"
+                            android:layout_centerHorizontal="true"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_stars_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
             </FrameLayout>
+
             <LinearLayout
                 android:id="@+id/gifBottomPanel"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingVertical="10dp"
+                android:padding="0dp"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/shape_rounded_half_bottom"
-                android:backgroundTint="@color/cardview_dark_background"
+                android:backgroundTint="@color/blue_grey_700"
                 >
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_add_link_24"
+                    style="@style/GifFragmentButton"
+                    android:id="@+id/gifUrl"
+                    android:clipChildren="false"
                     android:contentDescription="Copy link"
+                    android:src="@drawable/ic_add_link_24" />
+
+                <ImageView
+                    style="@style/GifFragmentButton"
+                    android:id="@+id/gifDownload"
+                    android:contentDescription="Download"
+                    android:src="@drawable/ic_download_24"
                     />
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_download_24"
-                    android:contentDescription="Download"
-                    />
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_account_circle_24"
+                    style="@style/GifFragmentButton"
+                    android:id="@+id/gifPerson"
                     android:contentDescription="Show user"
+                    android:src="@drawable/ic_account_circle_24"
                     />
+
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_web_24"
+                    style="@style/GifFragmentButton"
+                    android:id="@+id/gifWeb"
                     android:contentDescription="Open web"
-                    />
+                    android:src="@drawable/ic_web_24" />
             </LinearLayout>
         </RelativeLayout>
 
