@@ -14,9 +14,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerGifs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentTop="true"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintTop_toTopOf="parent"
 
             />

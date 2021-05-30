@@ -1,11 +1,16 @@
 package com.alterjuice.jgiphy;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
-import android.view.MenuItem;
+import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.alterjuice.jgiphy.adapters.GifAdapter;
@@ -18,6 +23,9 @@ import com.alterjuice.jgiphy.model.giphy.Gif;
 import com.alterjuice.jgiphy.model.giphy.response.SearchResponse;
 import com.alterjuice.jgiphy.model.giphy.response.TrendingResponse;
 import com.alterjuice.jgiphy.ui.GifFragment;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideContext;
+import com.bumptech.glide.MemoryCategory;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,69 +33,84 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String BASE_URL = "http://api.giphy.com/";
-
+    String TAG = "MainActivity";
     APIService apiService;
     GifAdapter adapter;
     ActivityMainBinding binding;
 
     public SearchResponse search;
     public static TrendingResponse trending;
+    private Parcelable recyclerViewState;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        boolean orientationIsPortrait = getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT;
+        adapter = prepareAdapter(orientationIsPortrait);
+        binding.recyclerGifs.setAdapter(adapter);
+    }
 
-    public GifAdapter prepareAdapter(){
-        GifAdapter adapter = new GifAdapter();
-        adapter.onBottomReachedListener = new OnBottomReachedListener() {
-            @Override
-            public void onBottomReached() {
+    public GifAdapter prepareAdapter(boolean orientationIsPortrait){
+        GifAdapter temp = new GifAdapter(orientationIsPortrait);
+        temp.onBottomReachedListener = () -> {
 
-            }
         };
-        adapter.onGifClickedListener = new OnGifClickedListener() {
-            @Override
-            public void onGifClicked(Gif gif, int position) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(binding.gifFragment.getId(), GifFragment.newInstance(gif))
-                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                        .addToBackStack("Tag")
-                        .commit();
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }
+        temp.onGifClickedListener = (gif, position) -> {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.fragment_open_enter, R.anim.fragment_open_exit,
+                            R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
+                    .replace(binding.gifFragment.getId(), GifFragment.newInstance(gif), "Tag")
+                    .addToBackStack("Tag")
+                    .commit();
+            turnOnOffHomeButton(true);
         };
-        return adapter;
+        return temp;
+    }
+    public void turnOnOffHomeButton(boolean show){
+        ActionBar bar = getSupportActionBar();
+        if (bar != null)
+            bar.setDisplayHomeAsUpEnabled(show);
     }
 
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 1){
             getSupportFragmentManager().popBackStack();
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            turnOnOffHomeButton(false);
         }else {
             super.onBackPressed();
         }
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_main);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        adapter = prepareAdapter();
-        binding.recyclerGifs.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        binding.recyclerGifs.setAdapter(adapter);
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        recyclerViewState = binding.recyclerGifs.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable("statkey", recyclerViewState);
+        super.onSaveInstanceState(outState);
+    }
 
-        binding.menu.getMenu().getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (trending.data.size() != 0)
-                    Log.d("xx", "YY");
-                return true;
-            }
-        });
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        recyclerViewState = savedInstanceState.getParcelable("statekey");
+    }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (recyclerViewState != null){
+            Log.d(TAG, "RecyclerState != null");
+            binding.recyclerGifs.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+            binding.recyclerGifs.requestLayout();
+        }
     }
 
     @Override
@@ -96,14 +119,18 @@ public class MainActivity extends AppCompatActivity {
         test();
     }
 
+    @Override
+    protected void onDestroy() {
+        new Thread(() -> Glide.get(getApplicationContext()).clearDiskCache()).start();
+        Glide.get(this).clearMemory();
+        super.onDestroy();
+    }
+
     public void test(){
-
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
 
         apiService = retrofit.create(APIService.class);
         apiService.getTrends(TestConfig.apiKey).enqueue(new Callback<TrendingResponse>() {
@@ -113,29 +140,21 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("MainActivity", "Response Trending is null");
                     return;
                 }
-                Log.d("RESPONSE Trending", response.toString());
                 trending = response.body();
                 adapter.update(trending.data);
             }
 
             @Override
-            public void onFailure(Call<TrendingResponse> call, Throwable t) {
-                Log.d("FAILURE Trending", t.getMessage());
-            }
+            public void onFailure(Call<TrendingResponse> call, Throwable t) { }
         });
 
         apiService.searchGif(TestConfig.apiKey, "good morning").enqueue(new Callback<SearchResponse>() {
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
-                Log.d("RESPONSE", response.toString());
                 search = response.body();
             }
-
             @Override
-            public void onFailure(Call<SearchResponse> call, Throwable t) {
-                Log.d("FAILURE", t.getMessage() + "");
-
-            }
+            public void onFailure(Call<SearchResponse> call, Throwable t) { }
         });
     }
 
