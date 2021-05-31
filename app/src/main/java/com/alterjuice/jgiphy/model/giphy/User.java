@@ -2,6 +2,8 @@ package com.alterjuice.jgiphy.model.giphy;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  *
  * The User Object
@@ -11,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * https://developers.giphy.com/docs/api/schema/#user-object
  */
-public class User {
+public class User implements Serializable {
 
     public @SerializedName("avatar_url")
     /* The URL for this user's avatar image. "https://media1.giphy.com/avatars/election2016/XwYrZi5H87o6.gif" */

@@ -25,4 +25,12 @@ public class Pagination {
     /* Total number of items returned. 25 */
     public Integer count;
 
+    @Override
+    public String toString() {
+        return "Pagination{" +
+                "offset=" + offset +
+                ", countTotal=" + countTotal +
+                ", count=" + count +
+                '}';
+    }
 }
