@@ -9,19 +9,29 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface APIService {
+    String BASE_URL = "http://api.giphy.com/";
 
     @GET("http://api.giphy.com/v1/gifs/search")
     Call<SearchResponse> searchGif(@Query("api_key") String apiKey, @Query("q") String searchQuery,
-                                   @Query("limit") Integer limit, @Query("offset") Integer offset,
+                                   @Query("offset") Integer offset, @Query("limit") Integer limit,
                                    @Query("rating") String rating, @Query("lang") String lang,
                                    @Query("random_id") String random_id
     );
 
-    @GET("http://api.giphy.com/v1/gifs/search")
+    @GET("v1/gifs/search")
     Call<SearchResponse> searchGif(@Query("api_key") String apiKey, @Query("q") String searchQuery);
+    @GET("v1/gifs/search")
+    Call<SearchResponse> searchGif(@Query("api_key") String apiKey, @Query("q") String searchQuery, @Query("offset") Integer offset);
+
+    @GET("v1/gifs/search")
+    Call<SearchResponse> searchGif(@Query("api_key") String apiKey, @Query("q") String searchQuery, @Query("offset") Integer offset, @Query("limit") Integer limit);
 
 
-    @GET("http://api.giphy.com/v1/gifs/trending")
+    @GET("v1/gifs/trending")
     Call<TrendingResponse> getTrends(@Query("api_key") String apiKey);
+    @GET("v1/gifs/trending")
+    Call<TrendingResponse> getTrends(@Query("api_key") String apiKey, @Query("offset") Integer offset);
+    @GET("v1/gifs/trending")
+    Call<TrendingResponse> getTrends(@Query("api_key") String apiKey, @Query("offset") Integer offset, @Query("limit") Integer limit);
 
 }
