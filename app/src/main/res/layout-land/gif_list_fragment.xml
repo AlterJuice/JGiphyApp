@@ -5,8 +5,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <include layout="@layout/app_bar" android:id="@+id/appBar"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerGifs"
+            android:layout_below="@id/appBar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:spanCount="2"
