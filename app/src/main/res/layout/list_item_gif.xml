@@ -20,20 +20,5 @@
         app:cardUseCompatPadding="true">
         <include layout="@layout/gif_view" android:id="@+id/gifLayoutImage"/>
 
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/gifImage"
-            android:layout_alignStart="@id/gifImage"
-            android:layout_alignEnd="@id/gifImage"
-            android:gravity="center"
-            android:text="@{gif.username}"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:visibility="@{gif.hasUser? View.VISIBLE : View.GONE}"
-            tools:text="Username" />
-
-
     </androidx.cardview.widget.CardView>
 </layout>
