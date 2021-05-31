@@ -30,8 +30,10 @@ public class MainActivity extends AppCompatActivity implements GifWindow {
 
         if (savedInstanceState == null) {
             GifListFragment gifListFragment = new GifListFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(binding.mainFragment.getId(), gifListFragment, GifListFragment.TAG).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(binding.mainFragment.getId(), gifListFragment, GifListFragment.TAG)
+                    .commit();
         }
     }
 

@@ -1,5 +1,6 @@
 package com.alterjuice.jgiphy.adapters;
 
-public interface OnBottomReachedListener {
+public interface OnBoundsReachedListener {
+    void onTopReached();
     void onBottomReached();
 }

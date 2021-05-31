@@ -3,7 +3,11 @@ package com.alterjuice.jgiphy.viewmodel;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.arch.core.util.Function;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.alterjuice.jgiphy.Repo;
@@ -14,6 +18,7 @@ import com.alterjuice.jgiphy.model.giphy.response.TrendingResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,14 +28,14 @@ public class GifListViewModel extends ViewModel {
     String TAG = "GifListViewModel";
     private final MutableLiveData<List<Gif>> gifs;
     private final MutableLiveData<String> gifSearchQuery;
-    private final MutableLiveData<Integer> gifOffset;
+    private final MutableLiveData<Integer> gifLastOffset;
 
-    private static final int LIMIT = 25;
-
+    private static final int LIMIT = 50;
 
     public GifListViewModel() {
-        gifSearchQuery = new MutableLiveData<>("");
-        gifOffset = new MutableLiveData<>(0);
+        gifSearchQuery = new MutableLiveData<>();
+
+        gifLastOffset = new MutableLiveData<>();
         gifs = new MutableLiveData<>();
     }
 
@@ -38,34 +43,40 @@ public class GifListViewModel extends ViewModel {
 
     public MutableLiveData<List<Gif>> getGifs(){ return gifs; }
 
-    public MutableLiveData<Integer> getGifOffset() { return gifOffset; }
-
+    public MutableLiveData<Integer> getGifLastOffset() { return gifLastOffset; }
 
     public void loadGifs(){
-        gifOffset.setValue(0);
+        getGifLastOffset().setValue(0);
         loadMoreGifs();
     }
 
     public void loadMoreGifs(){
         if (TextUtils.isEmpty(getGifSearchQuery().getValue())) {
-            loadMoreWithTrends();
+            loadMoreWithTrends(getGifLastOffset().getValue(), LIMIT);
         }else{
-            loadMoreWithSearch();
+            loadMoreWithSearch(getGifSearchQuery().getValue(), getGifLastOffset().getValue(), LIMIT);
         }
     }
 
+    // public void loadPreviousGifs(){
+    //     int offset = Math.max(getGifLastOffset().getValue()-LIMIT, 0);
+    //     int limit =  (getGifLastOffset().getValue() - offset) - LIMIT;
+    //     Log.d(TAG, offset + " " + limit);
+    //     if (TextUtils.isEmpty(getGifSearchQuery().getValue())) {
+    //         loadMoreWithTrends(offset, limit);
+    //     }else{
+    //         loadMoreWithSearch(offset, limit);
+    //     }
+    // }
+
     private void postResponseData(ArrayList<Gif> data, Pagination pagination){
-        int offsetWas = gifOffset.getValue();
-        int offsetNext = pagination.offset+pagination.count;
-        gifOffset.postValue(offsetNext);
-        gifs.postValue(data);
-        Log.d(TAG, "gifOffset was: "+offsetWas);
+        getGifs().postValue(data);
+        getGifLastOffset().postValue(pagination.offset+pagination.count);
         Log.d(TAG, "Pagination: "+pagination.toString());
-        Log.d(TAG, "gifOffset for next: "+offsetNext);
     }
 
-    private void loadMoreWithSearch(){
-        Repo.getGifsWithSearch(gifSearchQuery.getValue(), gifOffset.getValue(), LIMIT, new Callback<SearchResponse>() {
+    private void loadMoreWithSearch(String searchQuery, Integer offset, Integer count){
+        Repo.getGifsWithSearch(searchQuery, offset, count, new Callback<SearchResponse>() {
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 if (response.body() != null) {
@@ -77,9 +88,9 @@ public class GifListViewModel extends ViewModel {
         });
     }
 
-    private void loadMoreWithTrends(){
+    private void loadMoreWithTrends(Integer offset, Integer count){
         Log.d("loadMoreWithTrends", "Why Are u running");
-        Repo.getGifsWithTrends(gifOffset.getValue(), LIMIT, new Callback<TrendingResponse>() {
+        Repo.getGifsWithTrends(offset, count, new Callback<TrendingResponse>() {
             @Override
             public void onResponse(Call<TrendingResponse> call, Response<TrendingResponse> response) {
                 if (response.body() != null) {

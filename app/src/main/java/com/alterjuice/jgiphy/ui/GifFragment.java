@@ -20,6 +20,8 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.alterjuice.jgiphy.R;
 import com.alterjuice.jgiphy.databinding.GifFragmentBinding;
@@ -67,16 +69,23 @@ public class GifFragment extends Fragment {
             Log.d(TAG, "GifArgument is null");
             return binding.getRoot();
         }
-        model = new GifViewModel(gif);
-        grm = Glide.with(this);
+        model = new ViewModelProvider(requireActivity(), new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new GifViewModel(gif);
+            }
+        }).get(GifViewModel.class);
+        model.getGif().postValue(gif);
+        grm = Glide.with(requireActivity());
         return binding.getRoot();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -105,7 +114,9 @@ public class GifFragment extends Fragment {
 
                         @Override
                         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            binding.gifProgress.setVisibility(View.GONE);
+                            if (binding != null)
+                                if (binding.gifProgress != null)
+                                    binding.gifProgress.setVisibility(View.GONE);
                             return false;
                         }
                     })
@@ -135,7 +146,6 @@ public class GifFragment extends Fragment {
     public void onBackPressed(View view) {
         if (view.getId() == R.id.gifBack || view.getId() == R.id.gifFrame) {
             requireActivity().onBackPressed();
-            binding.gifLayoutImage.gifImage.destroyDrawingCache();
             // binding.gifFrame.animate().scaleX(0.2f).scaleY(0.2f).translationY(-400)
             //         .setDuration(300)
             //         .rotationX(90)

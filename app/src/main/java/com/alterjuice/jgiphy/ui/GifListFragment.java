@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.alterjuice.jgiphy.MainActivity;
 import com.alterjuice.jgiphy.R;
 import com.alterjuice.jgiphy.adapters.GifAdapter;
-import com.alterjuice.jgiphy.adapters.OnBottomReachedListener;
+import com.alterjuice.jgiphy.adapters.OnBoundsReachedListener;
 import com.alterjuice.jgiphy.adapters.OnGifClickedListener;
 import com.alterjuice.jgiphy.databinding.GifListFragmentBinding;
 import com.alterjuice.jgiphy.viewmodel.GifListViewModel;
@@ -31,15 +31,15 @@ public class GifListFragment extends Fragment {
     GifAdapter gifAdapter;
     GifListViewModel model;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.gif_list_fragment, container, false);
         boolean isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        gifAdapter = new GifAdapter(isPortrait, onBottomReachedListener, onGifClickedListener);
+        gifAdapter = new GifAdapter(isPortrait, onBoundsReachedListener, onGifClickedListener);
         binding.recyclerGifs.setAdapter(gifAdapter);
         binding.appBar.appBarSearch.setOnQueryTextListener(searchQueryListener);
+
         return binding.getRoot();
     }
 
@@ -49,20 +49,28 @@ public class GifListFragment extends Fragment {
         model = new ViewModelProvider(this).get(GifListViewModel.class);
         model.getGifSearchQuery().observe(getViewLifecycleOwner(), s -> {
             gifAdapter.clearItems();
-            Log.d(TAG, "GifAdapter Cleared. Setting Offset to 0");
+            Log.d(TAG, "New String : "+s+"; GifAdapter Cleared. Setting Offset to 0");
             model.loadGifs();
         });
         model.getGifs().observe(getViewLifecycleOwner(), gifs -> {
-            gifAdapter.update(gifs);
-            binding.executePendingBindings();
+            int offset = model.getGifLastOffset().getValue();
+            Log.d(TAG, "Updating Gifs, offset" + offset);
+            gifAdapter.updateWithStartPosition(gifs, offset);
         });
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        model.loadGifs();
     }
 
     @Override
     public void onDestroyView() {
         binding.unbind();
         binding = null;
-        gifAdapter = null;
+        // gifAdapter = null;
         super.onDestroyView();
     }
 
@@ -72,15 +80,21 @@ public class GifListFragment extends Fragment {
         }
     };
 
-    private final OnBottomReachedListener onBottomReachedListener = () -> {
-        model.loadMoreGifs();
+    private final OnBoundsReachedListener onBoundsReachedListener = new OnBoundsReachedListener() {
+        @Override
+        public void onTopReached() { }
+
+        @Override
+        public void onBottomReached() {
+            model.loadMoreGifs();
+        }
     };
 
     private final SearchView.OnQueryTextListener searchQueryListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
             if (model.getGifSearchQuery().getValue() != query)
-                model.getGifSearchQuery().postValue(query);
+                model.getGifSearchQuery().setValue(query);
             binding.appBar.appBarSearch.clearFocus();
             return false;
         }
@@ -89,7 +103,7 @@ public class GifListFragment extends Fragment {
             // Putting Trend Gifs to adapter if searchQuery is empty
             if (TextUtils.isEmpty(newText))
                 if (!TextUtils.isEmpty(model.getGifSearchQuery().getValue()))
-                    model.getGifSearchQuery().postValue("");
+                    model.getGifSearchQuery().setValue("");
             return false;
         }
     };

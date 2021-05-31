@@ -20,10 +20,12 @@ import com.alterjuice.jgiphy.utils.ImageUtils;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> implements BaseAdapter<Gif> {
 
-    private final OnBottomReachedListener onBottomReachedListener;
+    private final OnBoundsReachedListener onBoundsReachedListener;
+
     private final OnGifClickedListener onGifClickedListener;
 
     private final ConstraintSet constraintSet = new ConstraintSet();
@@ -34,10 +36,10 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
     RecyclerView recyclerView;
     LinkedList<Gif> collection = new LinkedList<>();
 
-    public GifAdapter(boolean orientationIsPortrait, OnBottomReachedListener onBottomReachedListener,
+    public GifAdapter(boolean orientationIsPortrait, OnBoundsReachedListener onBoundsReachedListener,
                       OnGifClickedListener onGifClickedListener){
         this.onGifClickedListener = onGifClickedListener;
-        this.onBottomReachedListener = onBottomReachedListener;
+        this.onBoundsReachedListener = onBoundsReachedListener;
         this.orientationIsPortrait = orientationIsPortrait;
         int orientation = StaggeredGridLayoutManager.VERTICAL;
         if (!this.orientationIsPortrait)
@@ -68,10 +70,14 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
 
     @Override
     public void onBindViewHolder(@NonNull GifViewHolder holder, int position) {
-        if (position == getItemCount()-1){
-            if (onBottomReachedListener != null) {
+        if (onBoundsReachedListener != null){
+            if (position == 1){
+                Log.d("Top Reached", "Pos: "+position +"; Count: "+getItemCount());
+                onBoundsReachedListener.onTopReached();
+            }
+            if (position == getItemCount()-1){
                 Log.d("Bottom Reached", "Pos: "+position +"; Count: "+getItemCount());
-                onBottomReachedListener.onBottomReached();
+                onBoundsReachedListener.onBottomReached();
             }
         }
         Gif bindGif = collection.get(position);
