@@ -1,6 +1,7 @@
 package com.alterjuice.jgiphy.adapters;
 
 import android.content.res.Configuration;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +69,10 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
     @Override
     public void onBindViewHolder(@NonNull GifViewHolder holder, int position) {
         if (position == getItemCount()-1){
-            if (onBottomReachedListener != null)
+            if (onBottomReachedListener != null) {
+                Log.d("Bottom Reached", "Pos: "+position +"; Count: "+getItemCount());
                 onBottomReachedListener.onBottomReached();
+            }
         }
         Gif bindGif = collection.get(position);
         Image bindImage = getPreviewImage(bindGif);
