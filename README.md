@@ -1,7 +1,5 @@
 # JGiphyApp
 Android Test Java App using giphy REST API for Natif company.
-# JGiphyApp
-Android Test Java App using giphy REST API for Natif company.
 > ![ScreenRecord: Portrait ](https://user-images.githubusercontent.com/32757860/120233011-77a54900-c25d-11eb-9d2b-afa807bb7897.gif)
 > Showing Portrait view of app. Gif detailed fragment with 4-5 buttons.
 
