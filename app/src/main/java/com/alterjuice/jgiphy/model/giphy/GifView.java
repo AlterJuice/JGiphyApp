@@ -1,7 +1,7 @@
 package com.alterjuice.jgiphy.model.giphy;
 
 /**
- * GifView is interface for giphy.Gif classes to get properly data
+ * GifView is interface for giphy.Gif class to get properly data
  *
  */
 public interface GifView {

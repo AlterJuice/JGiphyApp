@@ -37,11 +37,10 @@ import com.bumptech.glide.request.target.Target;
 
 
 public class GifFragment extends Fragment {
+    String TAG = "GifFragment";
     private static final String KEY_GIF = "arg:gif";
 
     private GifFragmentBinding binding;
-
-    String TAG = "GifFragment";
     private RequestManager grm;
     private GifViewModel model;
     boolean isPortrait;
@@ -59,7 +58,12 @@ public class GifFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.gif_fragment, container, false);
-        binding.getRoot().setClickable(true);
+        /*
+        If you set to R.layout.gif_fragment.gifFrame not clickable
+        you can see the properly work of ViewModel and live data
+        So only one gif will be shown to the user in several fragment instances
+        */
+
         isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         if (getArguments() == null) {
             Log.d(TAG, "FragmentArguments null");
@@ -117,9 +121,9 @@ public class GifFragment extends Fragment {
 
                         @Override
                         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            if (binding != null)
-                                if (binding.gifProgress != null)
-                                    binding.gifProgress.setVisibility(View.GONE);
+                            // Well i got NullPointerException errors on binding.gifProgress. Why?
+                            if (binding != null && binding.gifProgress != null)
+                                binding.gifProgress.setVisibility(View.GONE);
                             return false;
                         }
                     })
@@ -127,22 +131,22 @@ public class GifFragment extends Fragment {
                     .skipMemoryCache(true)
                     .into(binding.gifLayoutImage.gifImage);
 
-
+            binding.gifBack.setOnClickListener(v -> requireActivity().onBackPressed());
             binding.gifUrl.setOnClickListener(v -> {
+                // Helps user to copy the url link
                 ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 if (clipboard != null) {
                     ClipData clip = ClipData.newPlainText("Gif " + gif.title + ": ", gif.url);
                     clipboard.setPrimaryClip(clip);
-                    Toast.makeText(v.getContext(), "Url copied!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.action_url_copied, Toast.LENGTH_SHORT).show();
                 }
             });
 
             binding.gifPerson.setOnClickListener(v -> {
                 if (gif.hasUser()) startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(gif.user.urlProfile)));
             });
-            binding.gifWeb.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(gif.url))));
-            binding.gifBack.setOnClickListener(v -> requireActivity().onBackPressed());
             binding.gifDownload.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(gif.images.original.url))));
+            binding.gifWeb.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(gif.url))));
         }
     };
 

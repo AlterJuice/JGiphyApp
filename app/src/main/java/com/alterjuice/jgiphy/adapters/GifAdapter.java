@@ -1,6 +1,5 @@
 package com.alterjuice.jgiphy.adapters;
 
-import android.content.res.Configuration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.alterjuice.jgiphy.utils.ImageUtils;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> implements BaseAdapter<Gif> {
 
@@ -120,8 +118,6 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
 
         public void bind(Gif gif){
             this.gif = gif;
-            binding.setGif(gif);
-            binding.executePendingBindings();
         }
 
         @Override
