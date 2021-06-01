@@ -47,11 +47,6 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
         layoutManager = new StaggeredGridLayoutManager(layoutSpanCount, orientation);
     }
 
-    Image getFixedImage(Gif gif){
-        if (orientationIsPortrait)
-            return gif.getImageForPortrait();
-        return gif.getImageForLandscape();
-    }
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -81,7 +76,7 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
             }
         }
         Gif bindGif = collection.get(position);
-        Image bindImage = getFixedImage(bindGif);
+        Image bindImage = bindGif.getImageFor(orientationIsPortrait);
         holder.bind(bindGif);
         ImageUtils.loadGifIntoView(bindImage.url, holder.binding.gifLayoutImage.gifImage);
         constraintSet.clone(holder.binding.gifLayoutImage.gifConstraint);

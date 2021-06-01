@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class GifFragment extends Fragment {
     String TAG = "GifFragment";
     private RequestManager grm;
     private GifViewModel model;
+    boolean isPortrait;
 
 
     public static GifFragment newInstance(Gif gif) {
@@ -58,6 +60,7 @@ public class GifFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.gif_fragment, container, false);
         binding.getRoot().setClickable(true);
+        isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         if (getArguments() == null) {
             Log.d(TAG, "FragmentArguments null");
             return binding.getRoot();
@@ -104,7 +107,7 @@ public class GifFragment extends Fragment {
             set.applyTo(binding.gifLayoutImage.gifConstraint);
 
             grm.load(gif.getImageForOriginal().url)
-                    .thumbnail(grm.load(gif.getImageForPreview().url))
+                    .thumbnail(grm.load(gif.getImageFor(isPortrait).url))
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
