@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:item_card_view="http://schemas.android.com/apk/res-auto">
-
-    <data>
-        <import type="android.view.View" />
-        <variable
-            name="gif"
-            type="com.alterjuice.jgiphy.model.giphy.Gif" />
-    </data>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/gifCard"
@@ -18,7 +9,10 @@
         android:layout_margin="5dp"
         android:background="@drawable/shape_rounded"
         app:cardUseCompatPadding="true">
-        <include layout="@layout/gif_view" android:id="@+id/gifLayoutImage"/>
+
+        <include
+            android:id="@+id/gifLayoutImage"
+            layout="@layout/gif_view" />
 
     </androidx.cardview.widget.CardView>
 </layout>
