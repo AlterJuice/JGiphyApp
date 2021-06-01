@@ -1,9 +1,11 @@
 package com.alterjuice.jgiphy.model.giphy;
 
 public interface GifView {
-    Image getPreviewImage();
-    Image getFullImage();
     boolean hasUser();
+    Image getImageForPortrait();
+    Image getImageForLandscape();
+    Image getImageForPreview();
+    Image getImageForOriginal();
 
 
 }

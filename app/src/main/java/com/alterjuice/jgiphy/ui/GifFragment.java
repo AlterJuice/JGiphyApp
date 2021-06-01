@@ -100,11 +100,11 @@ public class GifFragment extends Fragment {
             binding.gifPerson.setVisibility(gif.hasUser() ? View.VISIBLE : View.GONE);
             ConstraintSet set = new ConstraintSet();
             set.clone(binding.gifLayoutImage.gifConstraint);
-            set.setDimensionRatio(binding.gifLayoutImage.gifImage.getId(), gif.getFullImage().getImageRatio());
+            set.setDimensionRatio(binding.gifLayoutImage.gifImage.getId(), gif.getImageForOriginal().getImageRatio());
             set.applyTo(binding.gifLayoutImage.gifConstraint);
 
-            grm.load(gif.getFullImage().url)
-                    .thumbnail(grm.load(gif.images.originalStill.url))
+            grm.load(gif.getImageForOriginal().url)
+                    .thumbnail(grm.load(gif.getImageForPreview().url))
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
