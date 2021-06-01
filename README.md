@@ -23,6 +23,16 @@
 
 <hr>
 
+## Using stack:
+ - Android SDK
+ - Java
+ - Android Architecture Components
+ - Pattern MVVM + Repo
+ - Retrofit2
+ - Gson
+ - Glide/Picasso
+
+
 > ## v1.7 
 > ### version with animated preview (as it was long ago) and a bit optimezed
 > ![ScreenRecord-20210601-033312](https://user-images.githubusercontent.com/32757860/120251667-efd63380-c28a-11eb-8d25-cbc5201a18b4.gif)
