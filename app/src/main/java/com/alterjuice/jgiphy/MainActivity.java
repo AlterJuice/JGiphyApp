@@ -1,17 +1,12 @@
 package com.alterjuice.jgiphy;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 
 import com.alterjuice.jgiphy.databinding.ActivityMainBinding;
 import com.alterjuice.jgiphy.model.giphy.Gif;
-import com.alterjuice.jgiphy.model.giphy.response.SearchResponse;
 import com.alterjuice.jgiphy.ui.GifFragment;
 import com.alterjuice.jgiphy.ui.GifListFragment;
 import com.alterjuice.jgiphy.ui.GifWindow;
