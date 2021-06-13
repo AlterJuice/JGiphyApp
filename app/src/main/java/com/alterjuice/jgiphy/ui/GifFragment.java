@@ -56,7 +56,6 @@ public class GifFragment extends Fragment {
         }
     };
 
-
     public static GifFragment newInstance(Gif gif) {
         GifFragment fragment = new GifFragment();
         Bundle args = new Bundle();
@@ -136,7 +135,15 @@ public class GifFragment extends Fragment {
                     .skipMemoryCache(true)
                     .into(binding.gifLayoutImage.gifImage);
 
-            binding.gifBack.setOnClickListener(v -> requireActivity().onBackPressed());
+            binding.gifBack.setOnClickListener(v -> {
+                // binding.gifFrame.animate().scaleX(0.2f).scaleY(0.2f).translationY(-400)
+                //         .setDuration(2000).rotationX(90).alpha(0.3f)
+                //         .setInterpolator(new LinearInterpolator())
+                //         .withEndAction(() -> requireActivity().onBackPressed())
+                //         .start();
+                requireActivity().onBackPressed();
+
+            });
             binding.gifUrl.setOnClickListener(v -> {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
@@ -144,49 +151,38 @@ public class GifFragment extends Fragment {
                 Intent chooserView = Intent.createChooser(intent, getString(R.string.share_gif_intent));
                 requireActivity().startActivityFromFragment(GifFragment.this, chooserView, 1);
             });
-            binding.gifUrl.setOnLongClickListener(v -> {
-                // Helps user to copy the url link
-                ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                if (clipboard != null) {
-                    ClipData oldData = clipboard.getPrimaryClip();
-
-                    ClipData newClip = ClipData.newPlainText(getString(R.string.gif_clipboard_copy, gif.title), gif.url);
-                    clipboard.setPrimaryClip(newClip);
-                    Snackbar copySnack = Snackbar.make(binding.getRoot(), R.string.action_url_copied, Snackbar.LENGTH_SHORT);
-                    copySnack.setAction(R.string.undo, v1 -> {
-                        clipboard.setPrimaryClip(oldData);
-                        Snackbar undoCopySnack = Snackbar.make(binding.getRoot(), R.string.undo_copy_data_added, BaseTransientBottomBar.LENGTH_SHORT);
-                        undoCopySnack.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE);
-                        undoCopySnack.addCallback(dismissSnackBarCallback);
-                        undoCopySnack.show();
-                    });
-                    copySnack.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE);
-                    copySnack.addCallback(dismissSnackBarCallback);
-                    copySnack.show();
-                }
-                return false;
-            });
-
-            binding.gifPerson.setOnClickListener(v -> {
-                if (gif.hasUser()) startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(gif.user.urlProfile)));
-            });
-            binding.gifDownload.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(gif.images.original.url))));
-            binding.gifWeb.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(gif.url))));
+            binding.gifUrl.setOnLongClickListener(v -> { copyLinkToClipboard(gif.title, gif.url); return false; });
+            binding.gifDownload.setOnClickListener(v -> openUrlInWeb(gif.images.original.url));
+            binding.gifPerson.setOnClickListener(v -> { if (gif.hasUser()) openUrlInWeb(gif.user.urlProfile); });
+            binding.gifWeb.setOnClickListener(v -> openUrlInWeb(gif.url));
         }
     };
 
-    public void onBackPressed(View view) {
-        if (view.getId() == R.id.gifBack || view.getId() == R.id.gifFrame) {
-            requireActivity().onBackPressed();
-            // binding.gifFrame.animate().scaleX(0.2f).scaleY(0.2f).translationY(-400)
-            //         .setDuration(300)
-            //         .rotationX(90)
-            //         .setInterpolator(new LinearInterpolator())
-            //         .withEndAction(() -> requireActivity().onBackPressed())
-            //         .start();
-        }
+    private void openUrlInWeb(String url){
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
+    private void copyLinkToClipboard(String urlTitle, String url){
+        // Helps user to copy the url link
+        ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard != null) {
+            // Saving old clip data to restore it with on UNDO click.
+            ClipData oldData = clipboard.getPrimaryClip();
+            ClipData newClip = ClipData.newPlainText(getString(R.string.gif_clipboard_copy, urlTitle), url);
+            clipboard.setPrimaryClip(newClip);
+            Snackbar copySnack = Snackbar.make(binding.getRoot(), R.string.action_url_copied, BaseTransientBottomBar.LENGTH_SHORT);
+            copySnack.setAction(R.string.undo, v1 -> {
+                clipboard.setPrimaryClip(oldData);
+                Snackbar undoCopySnack = Snackbar.make(binding.getRoot(), R.string.undo_copy_data_added, BaseTransientBottomBar.LENGTH_SHORT);
+                undoCopySnack.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE);
+                undoCopySnack.addCallback(dismissSnackBarCallback);
+                undoCopySnack.show();
+            });
+            copySnack.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+            copySnack.addCallback(dismissSnackBarCallback);
+            copySnack.show();
+        }
+    }
 
     @Override
     public void onDestroyView() {
@@ -194,5 +190,4 @@ public class GifFragment extends Fragment {
         binding = null;
         super.onDestroyView();
     }
-
 }
