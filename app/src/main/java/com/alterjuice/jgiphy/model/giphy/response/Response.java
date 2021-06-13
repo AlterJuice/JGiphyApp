@@ -8,11 +8,9 @@ import java.util.ArrayList;
 
 public class Response {
 
-    @SerializedName("data")
-    public ArrayList<Gif> data;
+    @SerializedName("data") public ArrayList<Gif> data;
 
-    @SerializedName("meta")
-    public Meta meta;
+    @SerializedName("meta") public Meta meta;
 
     public Response(){ }
 
