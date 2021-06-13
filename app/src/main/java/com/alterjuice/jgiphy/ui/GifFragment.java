@@ -8,11 +8,11 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,16 +34,27 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 
 public class GifFragment extends Fragment {
     String TAG = "GifFragment";
     private static final String KEY_GIF = "arg:gif";
+    private static final int TIMEOUT_DISMISS_SNACKBAR = 3000;
 
     private GifFragmentBinding binding;
     private RequestManager grm;
     private GifViewModel model;
     boolean isPortrait;
+
+    BaseTransientBottomBar.BaseCallback<Snackbar> dismissSnackBarCallback = new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+        @Override
+        public void onShown(Snackbar transientBottomBar) {
+            new Handler().postDelayed(transientBottomBar::dismiss, TIMEOUT_DISMISS_SNACKBAR);
+            super.onShown(transientBottomBar);
+        }
+    };
 
 
     public static GifFragment newInstance(Gif gif) {
@@ -89,12 +100,6 @@ public class GifFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setLifecycleOwner(getViewLifecycleOwner());
@@ -133,13 +138,33 @@ public class GifFragment extends Fragment {
 
             binding.gifBack.setOnClickListener(v -> requireActivity().onBackPressed());
             binding.gifUrl.setOnClickListener(v -> {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, gif.url);
+                Intent chooserView = Intent.createChooser(intent, getString(R.string.share_gif_intent));
+                requireActivity().startActivityFromFragment(GifFragment.this, chooserView, 1);
+            });
+            binding.gifUrl.setOnLongClickListener(v -> {
                 // Helps user to copy the url link
                 ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 if (clipboard != null) {
-                    ClipData clip = ClipData.newPlainText("Gif " + gif.title + ": ", gif.url);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(getContext(), R.string.action_url_copied, Toast.LENGTH_SHORT).show();
+                    ClipData oldData = clipboard.getPrimaryClip();
+
+                    ClipData newClip = ClipData.newPlainText(getString(R.string.gif_clipboard_copy, gif.title), gif.url);
+                    clipboard.setPrimaryClip(newClip);
+                    Snackbar copySnack = Snackbar.make(binding.getRoot(), R.string.action_url_copied, Snackbar.LENGTH_SHORT);
+                    copySnack.setAction(R.string.undo, v1 -> {
+                        clipboard.setPrimaryClip(oldData);
+                        Snackbar undoCopySnack = Snackbar.make(binding.getRoot(), R.string.undo_copy_data_added, BaseTransientBottomBar.LENGTH_SHORT);
+                        undoCopySnack.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE);
+                        undoCopySnack.addCallback(dismissSnackBarCallback);
+                        undoCopySnack.show();
+                    });
+                    copySnack.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE);
+                    copySnack.addCallback(dismissSnackBarCallback);
+                    copySnack.show();
                 }
+                return false;
             });
 
             binding.gifPerson.setOnClickListener(v -> {

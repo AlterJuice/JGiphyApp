@@ -6,4 +6,9 @@
     <string name="gif_button_tooltip_copy_text">Copy link</string>
     <string name="gif_button_tooltip_back">Back</string>
     <string name="action_url_copied">Url copied!</string>
+    <string name="share_gif_intent">Share Gif</string>
+    <string name="gif_origin_image">Gif origin image</string>
+    <string name="undo">Undo!</string>
+    <string name="undo_copy_data_added">Previous data restored to clipboard!</string>
+    <string name="gif_clipboard_copy" translatable="false">Gif %s:</string>
 </resources>

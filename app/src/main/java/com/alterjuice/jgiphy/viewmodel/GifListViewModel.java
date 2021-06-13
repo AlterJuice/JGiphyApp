@@ -68,7 +68,7 @@ public class GifListViewModel extends ViewModel {
     //     }
     // }
 
-    Callback<SearchTrendingResponse> searchTrendingResponseCallback = new Callback<SearchTrendingResponse>() {
+    private final Callback<SearchTrendingResponse> searchTrendingResponseCallback = new Callback<SearchTrendingResponse>() {
         @Override
         public void onResponse(Call<SearchTrendingResponse> call, Response<SearchTrendingResponse> response) {
             if (response.body() != null) {
@@ -77,9 +77,7 @@ public class GifListViewModel extends ViewModel {
         }
 
         @Override
-        public void onFailure(Call<SearchTrendingResponse> call, Throwable t) {
-
-        }
+        public void onFailure(Call<SearchTrendingResponse> call, Throwable t) { }
     };
 
     private void postResponseData(ArrayList<Gif> data, Pagination pagination) {

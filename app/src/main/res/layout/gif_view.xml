@@ -14,7 +14,7 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:contentDescription="Gif origin image"
+            android:contentDescription="@string/gif_origin_image"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintBottom_toBottomOf="parent"
