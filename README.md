@@ -1,4 +1,4 @@
-<img src="https://github.com/AlterJuice/JGiphyApp/blob/V1_85/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"> 
+<img src="/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"> 
 
 # JGiphyApp
 
