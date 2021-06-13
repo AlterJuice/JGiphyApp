@@ -24,10 +24,16 @@ public interface GifView {
     Image getImageForLandscape();
 
     /**
-     * @return Better to return the thumbnail(originalStill) Image or 2sec preview;
+     * @return Better to return the thumbnail(originalStill) Image;
      * Default is gif.images.originalStill
      */
-    Image getImageForPreview();
+    Image getStillImageForPreview();
+
+    /**
+     * @return Returns gif image for preview while the original is downloading
+     * Default is gif.images.getIma();
+     */
+    Image getGifImageForPreview();
 
     /**
      * @return Returns the original Image (Full sized) to put it in detailed frame

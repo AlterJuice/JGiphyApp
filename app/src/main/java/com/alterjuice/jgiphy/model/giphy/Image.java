@@ -21,44 +21,35 @@ import java.io.Serializable;
 public class Image implements ImageView, Serializable {
 
     // NotUsed to save memory. You can comment out for usage
-    // @SerializedName("frames")
     // /* The number of frames in this GIF. "15" */
-    // public String frames;
+    // @SerializedName("frames") public String frames;
 
-    @SerializedName("url")
     /* The publicly-accessible direct URL for this GIF for this size of the GIF. "https://media1.giphy.com/media/cZ7rmKfFYOvYI/200.gif" */
-    public String url;
+    @SerializedName("url") public String url;
 
-    @SerializedName("width")
     /* The width of this GIF in pixels. "320" */
-    public String width;
+    @SerializedName("width") public String width;
 
-    @SerializedName("height")
     /* The height of this GIF in pixels. "200" */
-    public String height;
+    @SerializedName("height") public String height;
 
-    @SerializedName("size")
     /* The size of this GIF in bytes. "32381" */
-    public String size;
+    @SerializedName("size") public String size;
 
-    @SerializedName("mp4")
     /* The URL for this GIF in .MP4 format. "https://media1.giphy.com/media/cZ7rmKfFYOvYI/200.mp4" */
-    public String mp4Url;
+    @SerializedName("mp4") public String mp4Url;
 
     // NotUsed to save memory. You can comment out for usage
-    // @SerializedName("mp4_size")
     // /* The size in bytes of the .MP4 file corresponding to this GIF. "25123" */
-    // public String mp4Size;
+    // @SerializedName("mp4_size") public String mp4Size;
 
     // NotUsed to save memory. You can comment out for usage
-    // @SerializedName("webp")
     // /* The URL for this GIF in .webp format. "https://media1.giphy.com/media/cZ7rmKfFYOvYI/200.webp" */
-    // public String webpUrl;
+    // @SerializedName("webp") public String webpUrl;
 
     // NotUsed to save memory. You can comment out for usage
-    // @SerializedName("webp_size")
     // /* The size in bytes of the .webp file corresponding to this GIF. "12321" */
-    // public String webpSize;
+    // @SerializedName("webp_size") public String webpSize;
 
 
     @Override
