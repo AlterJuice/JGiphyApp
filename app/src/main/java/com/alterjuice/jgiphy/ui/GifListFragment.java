@@ -3,7 +3,6 @@ package com.alterjuice.jgiphy.ui;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +10,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.alterjuice.jgiphy.R;
-import com.alterjuice.jgiphy.adapters.Callback;
 import com.alterjuice.jgiphy.adapters.GifAdapter;
 import com.alterjuice.jgiphy.adapters.OnBoundsReachedListener;
 import com.alterjuice.jgiphy.databinding.GifListFragmentBinding;
 import com.alterjuice.jgiphy.model.giphy.Gif;
 import com.alterjuice.jgiphy.viewmodel.GifListViewModel;
-
-import java.util.Collections;
 
 
 public class GifListFragment extends Fragment {
@@ -49,10 +44,11 @@ public class GifListFragment extends Fragment {
 
         model = new ViewModelProvider(this).get(GifListViewModel.class);
         model.getGifSearchQuery().observe(getViewLifecycleOwner(), s -> {
-            model.loadWithClear();
+            model.loadMoreGifs();
         });
         model.gifs.observe(getViewLifecycleOwner(), gifs -> gifAdapter.update(gifs));
-        model.loadMoreGifs();
+        model.loadWithClear();
+
     }
 
 

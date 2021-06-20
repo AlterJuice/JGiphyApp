@@ -86,13 +86,7 @@ public class GifFragment extends Fragment {
             Log.d(TAG, "GifArgument is null");
             return binding.getRoot();
         }
-        model = new ViewModelProvider(requireActivity(), new ViewModelProvider.Factory() {
-            @NonNull
-            @Override
-            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new GifViewModel(gif);
-            }
-        }).get(GifViewModel.class);
+        model = new ViewModelProvider(requireActivity()).get(GifViewModel.class);
         model.getGif().postValue(gif);
         grm = Glide.with(requireActivity());
         return binding.getRoot();
@@ -102,11 +96,14 @@ public class GifFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         model.getGif().observe(getViewLifecycleOwner(), gifObserver);
+        grm = Glide.with(requireActivity());
     }
 
     private final Observer<Gif> gifObserver = new Observer<Gif>() {
         @Override
         public void onChanged(Gif gif) {
+            if (gif == null)
+                return;
             binding.gifPerson.setVisibility(gif.hasUser() ? View.VISIBLE : View.GONE);
             ConstraintSet set = new ConstraintSet();
             set.clone(binding.gifLayoutImage.gifConstraint);

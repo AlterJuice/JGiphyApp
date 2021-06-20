@@ -82,11 +82,11 @@ public class GifAdapter extends ListAdapter<Gif, GifAdapter.GifViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull GifViewHolder holder, int position) {
         if (onBoundsReachedListener != null){
-            if (position == 1){
+            if (position <= 3){
                 Log.d("Top Reached", "Pos: "+position +"; Count: "+getItemCount());
                 onBoundsReachedListener.onTopReached();
             }
-            if (position == getItemCount()-1){
+            if (position >= getItemCount()-3){
                 Log.d("Bottom Reached", "Pos: "+position +"; Count: "+getItemCount());
                 onBoundsReachedListener.onBottomReached();
             }
@@ -98,6 +98,7 @@ public class GifAdapter extends ListAdapter<Gif, GifAdapter.GifViewHolder> {
 
     public void update(List<Gif> items) {
         submitList(items);
+        notifyDataSetChanged();
     }
 
 

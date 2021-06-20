@@ -1,6 +1,7 @@
 package com.alterjuice.jgiphy.viewmodel;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -25,9 +26,6 @@ public class GifListViewModel extends ViewModel {
     private final MutableLiveData<String> gifSearchQuery = new MutableLiveData<>();
     public LiveData<List<Gif>> gifs = liveGifs;
 
-    public GifListViewModel() {
-        loadMoreGifs();
-    }
 
     public MutableLiveData<String> getGifSearchQuery() {
         return gifSearchQuery;
@@ -35,15 +33,19 @@ public class GifListViewModel extends ViewModel {
 
 
     public void loadMoreGifs() {
-        int offset = liveGifs.getValue().size();
+        int offset = 0;
+        if (liveGifs.getValue() != null)
+            offset = liveGifs.getValue().size();
         if (TextUtils.isEmpty(getGifSearchQuery().getValue())) {
             loadMoreWithTrends(offset, Consts.countGifsPerRequestLimit);
         } else {
             loadMoreWithSearch(getGifSearchQuery().getValue(), offset, Consts.countGifsPerRequestLimit);
         }
+        Log.d("loader", "called");
     }
-    public void loadWithClear(){
-        liveGifs.setValue(Collections.emptyList());
+
+    public void loadWithClear() {
+        liveGifs.setValue(new ArrayList<>());
         loadMoreGifs();
     }
 
@@ -52,14 +54,14 @@ public class GifListViewModel extends ViewModel {
         public void onResponse(Call<SearchTrendingResponse> call, Response<SearchTrendingResponse> response) {
             if (response.body() != null) {
                 List<Gif> x = liveGifs.getValue();
-                if (x == null)
-                    x = Collections.emptyList();
                 x.addAll(response.body().data);
                 liveGifs.setValue(x);
             }
         }
+
         @Override
-        public void onFailure(Call<SearchTrendingResponse> call, Throwable t) { }
+        public void onFailure(Call<SearchTrendingResponse> call, Throwable t) {
+        }
     };
 
 
