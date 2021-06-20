@@ -13,16 +13,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.alterjuice.jgiphy.MainActivity;
 import com.alterjuice.jgiphy.R;
+import com.alterjuice.jgiphy.adapters.Callback;
 import com.alterjuice.jgiphy.adapters.GifAdapter;
 import com.alterjuice.jgiphy.adapters.OnBoundsReachedListener;
-import com.alterjuice.jgiphy.adapters.OnGifClickedListener;
 import com.alterjuice.jgiphy.databinding.GifListFragmentBinding;
+import com.alterjuice.jgiphy.model.giphy.Gif;
 import com.alterjuice.jgiphy.viewmodel.GifListViewModel;
+
+import java.util.Collections;
 
 
 public class GifListFragment extends Fragment {
@@ -34,51 +35,37 @@ public class GifListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.gif_list_fragment, container, false);
+        binding = GifListFragmentBinding.inflate(inflater, container, false);
         boolean isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        gifAdapter = new GifAdapter(isPortrait, onBoundsReachedListener, onGifClickedListener);
-        binding.recyclerGifs.setAdapter(gifAdapter);
-        binding.appBar.appBarSearch.setOnQueryTextListener(searchQueryListener);
-
+        gifAdapter = new GifAdapter(isPortrait, onBoundsReachedListener, this::showGif);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.recyclerGifs.setAdapter(gifAdapter);
+        binding.appBar.appBarSearch.setOnQueryTextListener(searchQueryListener);
+
         model = new ViewModelProvider(this).get(GifListViewModel.class);
         model.getGifSearchQuery().observe(getViewLifecycleOwner(), s -> {
-            gifAdapter.clearItems();
-            Log.d(TAG, "New String : "+s+"; GifAdapter Cleared. Setting Offset to 0");
-            model.loadGifs();
+            model.loadWithClear();
         });
-        model.getGifs().observe(getViewLifecycleOwner(), gifs -> {
-            int offset = model.getGifLastOffset().getValue();
-            Log.d(TAG, "Updating Gifs, offset" + offset);
-            gifAdapter.updateWithStartPosition(gifs, offset);
-        });
-
+        model.gifs.observe(getViewLifecycleOwner(), gifs -> gifAdapter.update(gifs));
+        model.loadMoreGifs();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        model.loadGifs();
-    }
 
-    @Override
-    public void onDestroyView() {
-        binding.unbind();
-        binding = null;
-        // gifAdapter = null;
-        super.onDestroyView();
+    public void showGif(Gif gif) {
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.fragment_open_enter, R.anim.fragment_open_exit,
+                        R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
+                .add(R.id.mainFragment, GifFragment.newInstance(gif), "Gif:" + gif.uniqueID)
+                .addToBackStack("Gif:" + gif.uniqueID)
+                .commit();
+        ((MainActivity) requireActivity()).turnOnOffHomeButton(true);
     }
-
-    private final OnGifClickedListener onGifClickedListener = (gif, position) -> {
-        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)){
-            ((MainActivity) requireActivity()).showGif(gif);
-        }
-    };
 
     private final OnBoundsReachedListener onBoundsReachedListener = new OnBoundsReachedListener() {
         @Override

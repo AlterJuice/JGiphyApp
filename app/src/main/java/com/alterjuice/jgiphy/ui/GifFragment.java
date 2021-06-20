@@ -67,7 +67,7 @@ public class GifFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.gif_fragment, container, false);
+        binding = GifFragmentBinding.inflate(inflater, container, false);
         /*
         If you set to R.layout.gif_fragment.gifFrame not clickable
         you can see the properly work of ViewModel and live data
@@ -101,7 +101,6 @@ public class GifFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.setLifecycleOwner(getViewLifecycleOwner());
         model.getGif().observe(getViewLifecycleOwner(), gifObserver);
     }
 
@@ -182,12 +181,5 @@ public class GifFragment extends Fragment {
             copySnack.addCallback(dismissSnackBarCallback);
             copySnack.show();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        binding.unbind();
-        binding = null;
-        super.onDestroyView();
     }
 }
