@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/gifCard"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        android:background="@drawable/shape_rounded"
-        app:cardUseCompatPadding="true">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/gifCard"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:background="@drawable/shape_rounded"
+    app:cardUseCompatPadding="true">
 
-        <include
-            android:id="@+id/gifLayoutImage"
-            layout="@layout/gif_view" />
+    <include
+        android:id="@+id/gifLayoutImage"
+        layout="@layout/gif_view" />
 
 
-    </androidx.cardview.widget.CardView>
-</layout>
+</androidx.cardview.widget.CardView>

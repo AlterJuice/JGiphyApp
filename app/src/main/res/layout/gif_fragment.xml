@@ -1,94 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gifFrame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_empty"
+    android:backgroundTint="@color/black_transparent"
+    android:clickable="true">
 
-    <FrameLayout
-        android:id="@+id/gifFrame"
+    <LinearLayout
+        android:id="@+id/gifLinear"
+        style="@style/GifFragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/shape_empty"
-        android:backgroundTint="@color/black_transparent"
-        android:clickable="true">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/gif_fragment_margin_small_side"
+        android:layout_marginVertical="@dimen/gif_fragment_margin_big_side"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/gifStartPanel"
+            style="@style/GifFragmentPanel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/gif_fragment_without_button_panel_size"
+            android:layout_gravity="top"
+            android:background="@drawable/shape_rounded_half_top">
+
+            <ProgressBar
+                android:id="@+id/gifProgress"
+                android:layout_width="@dimen/gif_fragment_without_button_panel_size"
+                android:layout_height="@dimen/gif_fragment_without_button_panel_size"
+                android:layout_gravity="end|center_vertical"
+                android:padding="10dp" />
+        </FrameLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/gifCard"
+            style="@style/GifFragmentCard"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <include
+                android:id="@+id/gifLayoutImage"
+                layout="@layout/gif_view" />
+
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
-            android:id="@+id/gifLinear"
-            style="@style/GifFragmentContainer"
+            android:id="@+id/gifEndPanel"
+            style="@style/GifFragmentPanel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/gif_fragment_margin_small_side"
-            android:layout_marginVertical="@dimen/gif_fragment_margin_big_side"
-            android:orientation="vertical">
+            android:layout_height="@dimen/gif_fragment_button_panel_size"
+            android:layout_gravity="bottom"
+            android:background="@drawable/shape_rounded_half_bottom"
+            android:orientation="horizontal">
 
-            <FrameLayout
-                android:id="@+id/gifStartPanel"
-                style="@style/GifFragmentPanel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/gif_fragment_without_button_panel_size"
-                android:layout_gravity="top"
-                android:background="@drawable/shape_rounded_half_top">
+            <ImageView
+                android:id="@+id/gifBack"
+                style="@style/GifFragmentButton"
+                android:src="@drawable/ic_arrow_back_ios_24"
+                android:tooltipText="@string/gif_button_tooltip_back" />
 
-                <ProgressBar
-                    android:id="@+id/gifProgress"
-                    android:layout_width="@dimen/gif_fragment_without_button_panel_size"
-                    android:layout_height="@dimen/gif_fragment_without_button_panel_size"
-                    android:layout_gravity="end|center_vertical"
-                    android:padding="10dp" />
-            </FrameLayout>
+            <ImageView
+                android:id="@+id/gifUrl"
+                style="@style/GifFragmentButton"
+                android:src="@drawable/ic_add_link_24"
+                android:tooltipText="@string/gif_button_tooltip_copy_text" />
 
-            <androidx.cardview.widget.CardView
-                style="@style/GifFragmentCard"
-                android:id="@+id/gifCard"
-                android:layout_width="match_parent"
-                android:layout_height="0dp">
-
-                <include
-                    android:id="@+id/gifLayoutImage"
-                    layout="@layout/gif_view" />
-
-            </androidx.cardview.widget.CardView>
-
-            <LinearLayout
-                android:id="@+id/gifEndPanel"
-                style="@style/GifFragmentPanel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/gif_fragment_button_panel_size"
-                android:layout_gravity="bottom"
-                android:background="@drawable/shape_rounded_half_bottom"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/gifBack"
-                    style="@style/GifFragmentButton"
-                    android:src="@drawable/ic_arrow_back_ios_24"
-                    android:tooltipText="@string/gif_button_tooltip_back" />
-
-                <ImageView
-                    android:id="@+id/gifUrl"
-                    style="@style/GifFragmentButton"
-                    android:src="@drawable/ic_add_link_24"
-                    android:tooltipText="@string/gif_button_tooltip_copy_text" />
-
-                <ImageView
-                    android:id="@+id/gifDownload"
-                    style="@style/GifFragmentButton"
-                    android:src="@drawable/ic_download_24"
-                    android:tooltipText="@string/gif_button_tooltip_download" />
+            <ImageView
+                android:id="@+id/gifDownload"
+                style="@style/GifFragmentButton"
+                android:src="@drawable/ic_download_24"
+                android:tooltipText="@string/gif_button_tooltip_download" />
 
 
-                <ImageView
-                    android:id="@+id/gifPerson"
-                    style="@style/GifFragmentButton"
-                    android:src="@drawable/ic_account_circle_24"
-                    android:tooltipText="@string/gif_button_tooltip_open_profile" />
+            <ImageView
+                android:id="@+id/gifPerson"
+                style="@style/GifFragmentButton"
+                android:src="@drawable/ic_account_circle_24"
+                android:tooltipText="@string/gif_button_tooltip_open_profile" />
 
-                <ImageView
-                    android:id="@+id/gifWeb"
-                    style="@style/GifFragmentButton"
-                    android:src="@drawable/ic_web_24"
-                    android:tooltipText="@string/gif_button_tooltip_open_web" />
+            <ImageView
+                android:id="@+id/gifWeb"
+                style="@style/GifFragmentButton"
+                android:src="@drawable/ic_web_24"
+                android:tooltipText="@string/gif_button_tooltip_open_web" />
 
-            </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
 
-    </FrameLayout>
-</layout>
+</FrameLayout>
