@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -19,12 +21,14 @@ import com.alterjuice.jgiphy.utils.ImageUtils;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.Callable;
 
-public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> implements BaseAdapter<Gif> {
+public class GifAdapter extends ListAdapter<Gif, GifAdapter.GifViewHolder> {
 
     private final OnBoundsReachedListener onBoundsReachedListener;
 
-    private final OnGifClickedListener onGifClickedListener;
+    private final Callback<Gif> onGifClickedListener;
 
     private final ConstraintSet constraintSet = new ConstraintSet();
     final boolean orientationIsPortrait;
@@ -32,10 +36,13 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
     private static final int layoutSpanCount = 2;
 
     RecyclerView recyclerView;
-    LinkedList<Gif> collection = new LinkedList<>();
+
+
 
     public GifAdapter(boolean orientationIsPortrait, OnBoundsReachedListener onBoundsReachedListener,
-                      OnGifClickedListener onGifClickedListener){
+                      Callback<Gif> onGifClickedListener){
+        super(gifDifferenceCallback);
+
         this.onGifClickedListener = onGifClickedListener;
         this.onBoundsReachedListener = onBoundsReachedListener;
         this.orientationIsPortrait = orientationIsPortrait;
@@ -44,6 +51,20 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
             orientation = StaggeredGridLayoutManager.HORIZONTAL;
         layoutManager = new StaggeredGridLayoutManager(layoutSpanCount, orientation);
     }
+
+
+    static DiffUtil.ItemCallback<Gif> gifDifferenceCallback = new DiffUtil.ItemCallback<Gif>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Gif oldItem, @NonNull Gif newItem) {
+            return oldItem.uniqueID.equals(newItem.uniqueID);
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Gif oldItem, @NonNull Gif newItem) {
+            return oldItem.uniqueID.equals(newItem.uniqueID) &&
+                    oldItem.url.equals(newItem.url);
+        }
+    };
 
 
     @Override
@@ -57,8 +78,8 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
     @Override
     public GifViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ListItemGifBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item_gif, parent, false);
-        return new GifViewHolder(binding.getRoot(), binding);
+        ListItemGifBinding binding = ListItemGifBinding.inflate(inflater, parent, false);
+        return new GifViewHolder(binding);
     }
 
     @Override
@@ -73,60 +94,36 @@ public class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifViewHolder> i
                 onBoundsReachedListener.onBottomReached();
             }
         }
-        Gif bindGif = collection.get(position);
-        Image bindImage = bindGif.getImageFor(orientationIsPortrait);
-        holder.bind(bindGif);
-        ImageUtils.loadGifIntoView(bindImage.url, holder.binding.gifLayoutImage.gifImage);
-        constraintSet.clone(holder.binding.gifLayoutImage.gifConstraint);
-        constraintSet.setDimensionRatio(holder.binding.gifLayoutImage.gifImage.getId(), bindImage.getImageRatio());
-        constraintSet.applyTo(holder.binding.gifLayoutImage.gifConstraint);
+
+        Gif bindGif = getItem(position);
+        holder.bind(bindGif, onGifClickedListener);
     }
 
-
-    @Override
-    public int getItemCount() { return collection.size(); }
-
-    @Override
-    public void updateWithStartPosition(Collection<Gif> items, int position) {
+    public void updateWithStartPosition(List<Gif> items, int position) {
         update(items);
         recyclerView.getLayoutManager().scrollToPosition(position);
     }
 
-    @Override
-    public void update(Collection<Gif> items) {
-        int sizeBeforeInsert = collection.size();
-        collection.addAll(items);
-        notifyItemRangeChanged(sizeBeforeInsert, items.size());
+    public void update(List<Gif> items) {
+        submitList(items);
     }
 
-    @Override
-    public void clearItems() {
-        collection.clear();
-        notifyDataSetChanged();
-    }
 
-    public class GifViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class GifViewHolder extends RecyclerView.ViewHolder {
         ListItemGifBinding binding;
-        Gif gif;
 
-        public GifViewHolder(@NonNull View itemView, ListItemGifBinding binding) {
-            super(itemView);
+        public GifViewHolder(ListItemGifBinding binding) {
+            super(binding.getRoot());
             this.binding = binding;
-            itemView.setOnClickListener(this);
         }
 
-
-        public void bind(Gif gif){
-            this.gif = gif;
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (onGifClickedListener != null){
-                onGifClickedListener.onGifClicked(gif, collection.indexOf(gif));
-            }
-
+        public void bind(Gif gif, Callback<Gif> gifClickedListener){
+            binding.getRoot().setOnClickListener(v -> gifClickedListener.run(gif));
+            Image bindImage = gif.getImageFor(orientationIsPortrait);
+            ImageUtils.loadGifIntoView(bindImage.url, binding.gifLayoutImage.gifImage);
+            constraintSet.clone(binding.gifLayoutImage.gifConstraint);
+            constraintSet.setDimensionRatio(binding.gifLayoutImage.gifImage.getId(), bindImage.getImageRatio());
+            constraintSet.applyTo(binding.gifLayoutImage.gifConstraint);
         }
     }
-
 }
