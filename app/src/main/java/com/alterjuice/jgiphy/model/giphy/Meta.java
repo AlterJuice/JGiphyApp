@@ -1,5 +1,6 @@
 package com.alterjuice.jgiphy.model.giphy;
 
+import com.alterjuice.jgiphy.Consts;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -16,11 +17,11 @@ import com.google.gson.annotations.SerializedName;
 public class Meta {
 
     /* HTTP Response Message.(required) "OK" */
-    @SerializedName("msg") public String msg;
+    @SerializedName(Consts.apiKeyMetaMsg) public String msg;
 
     /* HTTP Response Code. (required) 200 */
-    @SerializedName("status") public Integer status;
+    @SerializedName(Consts.apiKeyMetaStatus) public Integer status;
 
     /* A unique ID paired with this response from the API. "57eea03c72381f86e05c35d2" */
-    @SerializedName("response_id") public String responseID;
+    @SerializedName(Consts.apiKeyMetaResponseId) public String responseID;
 }

@@ -15,7 +15,7 @@ public class Repo {
     /* TODO: Set ApiKey from https://developers.giphy.com/dashboard/?create=true */
 
     private Repo() {
-        Retrofit retrofitInstance = new Retrofit.Builder().baseUrl(APIService.BASE_URL)
+        Retrofit retrofitInstance = new Retrofit.Builder().baseUrl(Consts.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         apiService = retrofitInstance.create(APIService.class);
     }

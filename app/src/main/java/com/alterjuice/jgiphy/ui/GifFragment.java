@@ -118,7 +118,7 @@ public class GifFragment extends Fragment {
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            Toast.makeText(getContext(), "Connection error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
                             return false;
                         }
 

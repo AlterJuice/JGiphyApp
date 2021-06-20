@@ -26,17 +26,14 @@ import java.util.concurrent.Callable;
 
 public class GifAdapter extends ListAdapter<Gif, GifAdapter.GifViewHolder> {
 
+    private static final int LAYOUT_SPAN_COUNT = 2;
     private final OnBoundsReachedListener onBoundsReachedListener;
-
     private final Callback<Gif> onGifClickedListener;
-
     private final ConstraintSet constraintSet = new ConstraintSet();
-    final boolean orientationIsPortrait;
+    private final boolean orientationIsPortrait;
     private final RecyclerView.LayoutManager layoutManager;
-    private static final int layoutSpanCount = 2;
 
-    RecyclerView recyclerView;
-
+    private RecyclerView recyclerView;
 
 
     public GifAdapter(boolean orientationIsPortrait, OnBoundsReachedListener onBoundsReachedListener,
@@ -49,7 +46,7 @@ public class GifAdapter extends ListAdapter<Gif, GifAdapter.GifViewHolder> {
         int orientation = StaggeredGridLayoutManager.VERTICAL;
         if (!this.orientationIsPortrait)
             orientation = StaggeredGridLayoutManager.HORIZONTAL;
-        layoutManager = new StaggeredGridLayoutManager(layoutSpanCount, orientation);
+        layoutManager = new StaggeredGridLayoutManager(LAYOUT_SPAN_COUNT, orientation);
     }
 
 
@@ -97,11 +94,6 @@ public class GifAdapter extends ListAdapter<Gif, GifAdapter.GifViewHolder> {
 
         Gif bindGif = getItem(position);
         holder.bind(bindGif, onGifClickedListener);
-    }
-
-    public void updateWithStartPosition(List<Gif> items, int position) {
-        update(items);
-        recyclerView.getLayoutManager().scrollToPosition(position);
     }
 
     public void update(List<Gif> items) {

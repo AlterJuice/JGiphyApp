@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.alterjuice.jgiphy.Consts;
 import com.alterjuice.jgiphy.Repo;
 import com.alterjuice.jgiphy.model.giphy.Gif;
 import com.alterjuice.jgiphy.model.giphy.response.SearchTrendingResponse;
@@ -19,8 +20,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GifListViewModel extends ViewModel {
-    String TAG = "GifListViewModel";
-    private static final int LIMIT = 50;
 
     private final MutableLiveData<List<Gif>> liveGifs = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<String> gifSearchQuery = new MutableLiveData<>();
@@ -38,9 +37,9 @@ public class GifListViewModel extends ViewModel {
     public void loadMoreGifs() {
         int offset = liveGifs.getValue().size();
         if (TextUtils.isEmpty(getGifSearchQuery().getValue())) {
-            loadMoreWithTrends(offset, LIMIT);
+            loadMoreWithTrends(offset, Consts.countGifsPerRequestLimit);
         } else {
-            loadMoreWithSearch(getGifSearchQuery().getValue(), offset, LIMIT);
+            loadMoreWithSearch(getGifSearchQuery().getValue(), offset, Consts.countGifsPerRequestLimit);
         }
     }
     public void loadWithClear(){

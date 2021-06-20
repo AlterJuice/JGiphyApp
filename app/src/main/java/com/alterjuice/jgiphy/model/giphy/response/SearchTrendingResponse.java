@@ -1,5 +1,6 @@
 package com.alterjuice.jgiphy.model.giphy.response;
 
+import com.alterjuice.jgiphy.Consts;
 import com.alterjuice.jgiphy.model.giphy.Pagination;
 import com.google.gson.annotations.SerializedName;
 
@@ -8,6 +9,6 @@ import com.google.gson.annotations.SerializedName;
  * So that is why Search and Trend responses becomes as one thing.
  */
 public class SearchTrendingResponse extends Response {
-    @SerializedName("pagination")
+    @SerializedName(Consts.apiKeyPagination)
     public Pagination pagination;
 }

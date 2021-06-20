@@ -1,5 +1,6 @@
 package com.alterjuice.jgiphy.model.giphy;
 
+import com.alterjuice.jgiphy.Consts;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -33,83 +34,83 @@ public class Images implements Serializable {
 
 
     /* Data on versions of this GIF with a fixed height of 200 pixels. Good for mobile use. */
-    @SerializedName("fixed_height") public Image fixedHeight;
+    @SerializedName(Consts.apiKeyImagesFixedHeight) public Image fixedHeight;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on a static image of this GIF with a fixed height of 200 pixels. */
-    // @SerializedName("fixed_height_still") public Image fixedHeightStill;
+    // @SerializedName(Consts.apiKeyImagesFixedHeightStill) public Image fixedHeightStill;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on versions of this GIF with a fixed height of 200 pixels and the number of frames reduced to 6. */
-    // @SerializedName("fixed_height_downsampled") public Image fixedHeightDownsampled;
+    // @SerializedName(Consts.apiKeyImagesFixedHeightDownsampled) public Image fixedHeightDownsampled;
 
 
     /* Data on versions of this GIF with a fixed width of 200 pixels. Good for mobile use. */
-    @SerializedName("fixed_width") public Image fixedWidth;
+    @SerializedName(Consts.apiKeyImagesFixedWidth) public Image fixedWidth;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on a static image of this GIF with a fixed width of 200 pixels. */
-    // @SerializedName("fixed_width_still") public Image fixedWidthStill;
+    // @SerializedName(Consts.apiKeyImagesFixedWidthStill) public Image fixedWidthStill;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on versions of this GIF with a fixed width of 200 pixels and the number of frames reduced to 6. */
-    // @SerializedName("fixed_width_downsampled") public Image fixedWidthDownsampled;
+    // @SerializedName(Consts.apiKeyImagesFixedWidthDownsampled) public Image fixedWidthDownsampled;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on versions of this GIF with a fixed height of 100 pixels. Good for mobile keyboards. */
-    // @SerializedName("fixed_height_small") public Image fixedHeightSmall;
+    // @SerializedName(Consts.apiKeyImagesFixedHeightSmall) public Image fixedHeightSmall;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on a static image of this GIF with a fixed height of 100 pixels. */
-    // @SerializedName("fixed_height_small_still") public Image fixedHeightSmallStill;
+    // @SerializedName(Consts.apiKeyImagesFixedHeightSmallStill) public Image fixedHeightSmallStill;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on versions of this GIF with a fixed width of 100 pixels. Good for mobile keyboards. */
-    // @SerializedName("fixed_width_small") public Image fixedWidthSmall;
+    // @SerializedName(Consts.apiKeyImagesFixedWidthSmall) public Image fixedWidthSmall;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on a static image of this GIF with a fixed width of 100 pixels. */
-    // @SerializedName("fixed_width_small_still") public Image fixedWidthSmallStill;
+    // @SerializedName(Consts.apiKeyImagesFixedWidthSmallStill) public Image fixedWidthSmallStill;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on a version of this GIF downsized to be under 2mb. */
-    // @SerializedName("downsized") public Image downsized;
+    // @SerializedName(Consts.apiKeyImagesDownsized) public Image downsized;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on a static preview image of the downsized version of this GIF. */
-    // @SerializedName("downsized_still") public Image downsizedStill;
+    // @SerializedName(Consts.apiKeyImagesDownsizedStill) public Image downsizedStill;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on a version of this GIF downsized to be under 8mb. */
-    // @SerializedName("downsized_large") public Image downsizedLarge;
+    // @SerializedName(Consts.apiKeyImagesDownsizedLarge) public Image downsizedLarge;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on a version of this GIF downsized to be under 5mb. */
-    // @SerializedName("downsized_medium") public Image downsizedMedium;
+    // @SerializedName(Consts.apiKeyImagesDownsizedMedium) public Image downsizedMedium;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on a version of this GIF downsized to be under 200kb. */
-    // @SerializedName("downsized_small") public Image downsizedSmall;
+    // @SerializedName(Consts.apiKeyImagesDownsizedSmall) public Image downsizedSmall;
 
 
     /* Data on the original version of this GIF. Good for desktop use. */
-    @SerializedName("original") public Image original;
+    @SerializedName(Consts.apiKeyImagesOriginal) public Image original;
 
 
     /* Data on a static preview image of the original GIF. */
-    @SerializedName("original_still") public Image originalStill;
+    @SerializedName(Consts.apiKeyImagesOriginalStill) public Image originalStill;
 
     // NotUsed to save memory. You can comment out for usage
     // /* Data on the 15 second version of the GIF looping. */
-    // @SerializedName("looping") public Image looping;
+    // @SerializedName(Consts.apiKeyImagesLooping) public Image looping;
 
 
     /* Data on a version of this GIF in .MP4 format limited to 50kb that displays the first 1-2 seconds of the GIF. */
-    @SerializedName("preview") public Image preview;
+    @SerializedName(Consts.apiKeyImagesPreview) public Image preview;
 
 
     /* Data on a version of this GIF limited to 50kb that displays the first 1-2 seconds of the GIF. */
-    @SerializedName("preview_gif") public Image previewGif;
+    @SerializedName(Consts.apiKeyImagesPreviewGif) public Image previewGif;
 
 
 }

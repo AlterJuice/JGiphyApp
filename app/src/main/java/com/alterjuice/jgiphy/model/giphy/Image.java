@@ -1,5 +1,6 @@
 package com.alterjuice.jgiphy.model.giphy;
 
+import com.alterjuice.jgiphy.Consts;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -22,35 +23,35 @@ public class Image implements ImageView, Serializable {
 
     // NotUsed to save memory. You can comment out for usage
     // /* The number of frames in this GIF. "15" */
-    // @SerializedName("frames") public String frames;
+    // @SerializedName(Consts.apiKeyImageFrames) public String frames;
 
     /* The publicly-accessible direct URL for this GIF for this size of the GIF. "https://media1.giphy.com/media/cZ7rmKfFYOvYI/200.gif" */
-    @SerializedName("url") public String url;
+    @SerializedName(Consts.apiKeyImageUrl) public String url;
 
     /* The width of this GIF in pixels. "320" */
-    @SerializedName("width") public String width;
+    @SerializedName(Consts.apiKeyImageWidth) public String width;
 
     /* The height of this GIF in pixels. "200" */
-    @SerializedName("height") public String height;
+    @SerializedName(Consts.apiKeyImageHeight) public String height;
 
     /* The size of this GIF in bytes. "32381" */
-    @SerializedName("size") public String size;
+    @SerializedName(Consts.apiKeyImageSize) public String size;
 
     // NotUsed to save memory. You can comment out for usage
     // /* The URL for this GIF in .MP4 format. "https://media1.giphy.com/media/cZ7rmKfFYOvYI/200.mp4" */
-    // @SerializedName("mp4") public String mp4Url;
+    // @SerializedName(Consts.apiKeyImageMp4) public String mp4Url;
 
     // NotUsed to save memory. You can comment out for usage
     // /* The size in bytes of the .MP4 file corresponding to this GIF. "25123" */
-    // @SerializedName("mp4_size") public String mp4Size;
+    // @SerializedName(Consts.apiKeyImageMp4Size) public String mp4Size;
 
     // NotUsed to save memory. You can comment out for usage
     // /* The URL for this GIF in .webp format. "https://media1.giphy.com/media/cZ7rmKfFYOvYI/200.webp" */
-    // @SerializedName("webp") public String webpUrl;
+    // @SerializedName(Consts.apiKeyImageWebp) public String webpUrl;
 
     // NotUsed to save memory. You can comment out for usage
     // /* The size in bytes of the .webp file corresponding to this GIF. "12321" */
-    // @SerializedName("webp_size") public String webpSize;
+    // @SerializedName(Consts.apiKeyImageWebpSize) public String webpSize;
 
 
     @Override

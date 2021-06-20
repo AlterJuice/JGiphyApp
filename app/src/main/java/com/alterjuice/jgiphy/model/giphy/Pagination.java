@@ -1,5 +1,6 @@
 package com.alterjuice.jgiphy.model.giphy;
 
+import com.alterjuice.jgiphy.Consts;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -14,13 +15,13 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Pagination {
     /* Position in pagination. 2591 */
-    @SerializedName("offset") public Integer offset;
+    @SerializedName(Consts.apiKeyPaginationOffset) public Integer offset;
 
     /* Total number of items available (not returned on every endpoint). 250 */
-    @SerializedName("total_count") public Integer countTotal;
+    @SerializedName(Consts.apiKeyPaginationTotalCount) public Integer countTotal;
 
     /* Total number of items returned. 25 */
-    @SerializedName("count") public Integer count;
+    @SerializedName(Consts.apiKeyPaginationCount) public Integer count;
 
     @Override
     public String toString() {
