@@ -36,8 +36,9 @@ public class Image implements ImageView, Serializable {
     /* The size of this GIF in bytes. "32381" */
     @SerializedName("size") public String size;
 
-    /* The URL for this GIF in .MP4 format. "https://media1.giphy.com/media/cZ7rmKfFYOvYI/200.mp4" */
-    @SerializedName("mp4") public String mp4Url;
+    // NotUsed to save memory. You can comment out for usage
+    // /* The URL for this GIF in .MP4 format. "https://media1.giphy.com/media/cZ7rmKfFYOvYI/200.mp4" */
+    // @SerializedName("mp4") public String mp4Url;
 
     // NotUsed to save memory. You can comment out for usage
     // /* The size in bytes of the .MP4 file corresponding to this GIF. "25123" */
