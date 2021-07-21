@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,15 +17,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.alterjuice.jgiphy.R;
 import com.alterjuice.jgiphy.databinding.GifFragmentBinding;
 import com.alterjuice.jgiphy.model.giphy.Gif;
+import com.alterjuice.jgiphy.ui.base.BaseFragment;
 import com.alterjuice.jgiphy.viewmodel.GifViewModel;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -38,17 +35,16 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 
-public class GifFragment extends Fragment {
+public class GifFragment extends BaseFragment {
     String TAG = "GifFragment";
     private static final String KEY_GIF = "arg:gif";
     private static final int TIMEOUT_DISMISS_SNACKBAR = 3000;
 
     private GifFragmentBinding binding;
     private RequestManager grm;
-    private GifViewModel model;
-    boolean isPortrait;
+    private GifViewModel vm;
 
-    BaseTransientBottomBar.BaseCallback<Snackbar> dismissSnackBarCallback = new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+    private final BaseTransientBottomBar.BaseCallback<Snackbar> dismissSnackBarCallback = new BaseTransientBottomBar.BaseCallback<Snackbar>() {
         @Override
         public void onShown(Snackbar transientBottomBar) {
             new Handler().postDelayed(transientBottomBar::dismiss, TIMEOUT_DISMISS_SNACKBAR);
@@ -56,7 +52,7 @@ public class GifFragment extends Fragment {
         }
     };
 
-    public static GifFragment newInstance(Gif gif) {
+    static GifFragment newInstance(Gif gif) {
         GifFragment fragment = new GifFragment();
         Bundle args = new Bundle();
         args.putSerializable(KEY_GIF, gif);
@@ -74,29 +70,47 @@ public class GifFragment extends Fragment {
         So only one gif will be shown to the user in several fragment instances
         */
 
-        isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
         if (getArguments() == null) {
             Log.d(TAG, "FragmentArguments null");
-            return binding.getRoot();
+            closeFragment();
+            return null;
         }
-
-        Gif gif = (Gif) getArguments().getSerializable(KEY_GIF);
-
-        if (gif == null) {
-            Log.d(TAG, "GifArgument is null");
-            return binding.getRoot();
-        }
-        model = new ViewModelProvider(requireActivity()).get(GifViewModel.class);
-        model.getGif().postValue(gif);
-        grm = Glide.with(requireActivity());
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        model.getGif().observe(getViewLifecycleOwner(), gifObserver);
+        initViewModels();
+        attachObservers();
+        Gif gif = (Gif) getArguments().getSerializable(KEY_GIF);
+        if (gif == null) {
+            Log.d(TAG, "GifArgument is null");
+            closeFragment();
+            return;
+        }
+        vm.setGif(gif);
         grm = Glide.with(requireActivity());
+    }
+
+    @Override
+    protected void initViewModels() {
+        vm = new ViewModelProvider(requireActivity()).get(GifViewModel.class);
+    }
+
+    @Override
+    protected void attachObservers() {
+        vm.liveGif.observe(getViewLifecycleOwner(), gifObserver);
+    }
+
+    @Override
+    protected void closeFragment() {
+        // binding.gifFrame.animate().scaleX(0.2f).scaleY(0.2f).translationY(-400)
+        //         .setDuration(2000).rotationX(90).alpha(0.3f)
+        //         .setInterpolator(new LinearInterpolator())
+        //         .withEndAction(() -> onBackPressed())
+        //         .start();
+        onBackPressed();
     }
 
     private final Observer<Gif> gifObserver = new Observer<Gif>() {
@@ -111,7 +125,7 @@ public class GifFragment extends Fragment {
             set.applyTo(binding.gifLayoutImage.gifConstraint);
 
             grm.load(gif.getImageForOriginal().url)
-                    .thumbnail(grm.load(gif.getImageFor(isPortrait).url))
+                    .thumbnail(grm.load(gif.getImageFor(orientationIsPortrait()).url))
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -131,15 +145,7 @@ public class GifFragment extends Fragment {
                     .skipMemoryCache(true)
                     .into(binding.gifLayoutImage.gifImage);
 
-            binding.gifBack.setOnClickListener(v -> {
-                // binding.gifFrame.animate().scaleX(0.2f).scaleY(0.2f).translationY(-400)
-                //         .setDuration(2000).rotationX(90).alpha(0.3f)
-                //         .setInterpolator(new LinearInterpolator())
-                //         .withEndAction(() -> requireActivity().onBackPressed())
-                //         .start();
-                requireActivity().onBackPressed();
-
-            });
+            binding.gifBack.setOnClickListener(v -> closeFragment());
             binding.gifUrl.setOnClickListener(v -> {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
@@ -179,4 +185,6 @@ public class GifFragment extends Fragment {
             copySnack.show();
         }
     }
+
+
 }

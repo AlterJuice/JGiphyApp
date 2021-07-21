@@ -1,7 +1,6 @@
 package com.alterjuice.jgiphy.viewmodel;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,7 +12,7 @@ import com.alterjuice.jgiphy.model.giphy.Gif;
 import com.alterjuice.jgiphy.model.giphy.response.SearchTrendingResponse;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 import retrofit2.Call;
@@ -22,30 +21,31 @@ import retrofit2.Response;
 
 public class GifListViewModel extends ViewModel {
 
-    private final MutableLiveData<List<Gif>> liveGifs = new MutableLiveData<>(new ArrayList<>());
-    private final MutableLiveData<String> gifSearchQuery = new MutableLiveData<>();
-    public LiveData<List<Gif>> gifs = liveGifs;
+    private final MutableLiveData<List<Gif>> mutableLiveGifs = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<String> mutableGifSearchQuery = new MutableLiveData<>();
+    public final LiveData<List<Gif>> gifs = mutableLiveGifs;
+    public final LiveData<String> gifSearchQuery = mutableGifSearchQuery;
 
 
-    public MutableLiveData<String> getGifSearchQuery() {
-        return gifSearchQuery;
+    public void setSearchQuery(String query){
+        mutableGifSearchQuery.setValue(query);
     }
-
 
     public void loadMoreGifs() {
         int offset = 0;
-        if (liveGifs.getValue() != null)
-            offset = liveGifs.getValue().size();
-        if (TextUtils.isEmpty(getGifSearchQuery().getValue())) {
+        List<Gif> liveGifValue = mutableLiveGifs.getValue();
+        if (liveGifValue != null)
+            offset = liveGifValue.size();
+        String gifSearchQueryValue = mutableGifSearchQuery.getValue();
+        if (TextUtils.isEmpty(gifSearchQueryValue)) {
             loadMoreWithTrends(offset, Consts.countGifsPerRequestLimit);
         } else {
-            loadMoreWithSearch(getGifSearchQuery().getValue(), offset, Consts.countGifsPerRequestLimit);
+            loadMoreWithSearch(gifSearchQueryValue, offset, Consts.countGifsPerRequestLimit);
         }
-        Log.d("loader", "called");
     }
 
     public void loadWithClear() {
-        liveGifs.setValue(new ArrayList<>());
+        mutableLiveGifs.setValue(new ArrayList<>());
         loadMoreGifs();
     }
 
@@ -53,9 +53,13 @@ public class GifListViewModel extends ViewModel {
         @Override
         public void onResponse(Call<SearchTrendingResponse> call, Response<SearchTrendingResponse> response) {
             if (response.body() != null) {
-                List<Gif> x = liveGifs.getValue();
-                x.addAll(response.body().data);
-                liveGifs.setValue(x);
+                List<Gif> x = mutableLiveGifs.getValue();
+                Collection<Gif> responseList = response.body().data;
+                if (x!=null)
+                    x.addAll(responseList);
+                else
+                    x = new ArrayList<>(responseList);
+                mutableLiveGifs.setValue(x);
             }
         }
 

@@ -2,31 +2,25 @@ package com.alterjuice.jgiphy.adapters;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.alterjuice.jgiphy.R;
 import com.alterjuice.jgiphy.databinding.ListItemGifBinding;
 import com.alterjuice.jgiphy.model.giphy.Gif;
 import com.alterjuice.jgiphy.model.giphy.Image;
 import com.alterjuice.jgiphy.utils.ImageUtils;
 
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class GifAdapter extends ListAdapter<Gif, GifAdapter.GifViewHolder> {
 
-    private static final int LAYOUT_SPAN_COUNT = 2;
+    public static final int LAYOUT_SPAN_COUNT = 2;
     private final OnBoundsReachedListener onBoundsReachedListener;
     private final Callback<Gif> onGifClickedListener;
     private final ConstraintSet constraintSet = new ConstraintSet();
@@ -96,14 +90,8 @@ public class GifAdapter extends ListAdapter<Gif, GifAdapter.GifViewHolder> {
         holder.bind(bindGif, onGifClickedListener);
     }
 
-    public void update(List<Gif> items) {
-        submitList(items);
-        notifyDataSetChanged();
-    }
-
-
     public class GifViewHolder extends RecyclerView.ViewHolder {
-        ListItemGifBinding binding;
+        private final ListItemGifBinding binding;
 
         public GifViewHolder(ListItemGifBinding binding) {
             super(binding.getRoot());

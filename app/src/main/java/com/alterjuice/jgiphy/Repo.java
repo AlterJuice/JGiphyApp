@@ -11,7 +11,7 @@ public class Repo {
 
     private static Repo repoInstance;
     private final APIService apiService;
-    private static final String giphyApiKey = "";
+    private static final String giphyApiKey = "G4DxljS8SuIWFx9lwTDzNXbiHFQod3Uo";
     /* TODO: Set ApiKey from https://developers.giphy.com/dashboard/?create=true */
 
     private Repo() {

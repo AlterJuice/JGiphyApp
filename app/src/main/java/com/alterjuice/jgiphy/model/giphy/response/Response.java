@@ -6,7 +6,6 @@ import com.alterjuice.jgiphy.model.giphy.Meta;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Collection;
-import java.util.List;
 
 public class Response {
 
